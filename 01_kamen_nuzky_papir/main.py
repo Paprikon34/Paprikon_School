@@ -2,6 +2,9 @@ import pygame
 import random
 import os
 import sys
+import traceback
+import tkinter as tk
+from tkinter import messagebox
 
 # Configuration
 WIDTH, HEIGHT = 800, 600
@@ -172,6 +175,38 @@ class Game:
         pygame.quit()
         sys.exit()
 
+def show_error_popup(error_message):
+    """Zobrazí uživateli vyskakovací okno s popisem chyby."""
+    try:
+        root = tk.Tk()
+        root.withdraw()
+        messagebox.showerror("Kritická chyba", 
+                           f"Aplikace narazila na problém a musí být ukončena.\n\n"
+                           f"Detaily byly uloženy do souboru 'crash_report.txt'.\n\n"
+                           f"Chyba:\n{error_message.splitlines()[-1]}")
+        root.destroy()
+    except:
+        # Fallback pokud tkinter selže
+        print(f"Kritická chyba: {error_message}", file=sys.stderr)
+
 if __name__ == "__main__":
-    game = Game()
-    game.run()
+    try:
+        game = Game()
+        game.run()
+    except Exception:
+        # Získání celého tracebacku
+        error_info = traceback.format_exc()
+        
+        # Zápis do logovacího souboru
+        try:
+            with open("crash_report.txt", "w", encoding="utf-8") as f:
+                f.write("======= ROCK PAPER SCISSORS CRASH REPORT =======\n")
+                f.write(f"Exception details:\n")
+                f.write("-" * 40 + "\n")
+                f.write(error_info)
+        except:
+            pass # Pokud selže i zápis do souboru, nic víc dělat nemůžeme
+        
+        # Zobrazení popupu
+        show_error_popup(error_info)
+        sys.exit(1)

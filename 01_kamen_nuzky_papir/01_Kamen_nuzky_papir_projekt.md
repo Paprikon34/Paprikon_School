@@ -64,6 +64,13 @@ color = (ACCENT[0]+20, ACCENT[1]+20, ACCENT[2]+20) if is_hovered else CARD_BG
 ```
 *Vysvětlení:* Pokud se souřadnice myši nacházejí uvnitř obdélníku tlačítka, barva se mírně zesvětlí, což dává uživateli zpětnou vazbu.
 
+### 3.4 Zpracování chyb a pádů
+Aplikace obsahuje robustní systém pro zachycení neočekávaných chyb, který zabraňuje „tichému“ pádu programu bez vysvětlení.
+
+- **Globální try-except**: Celý běh hry se nachází v bloku `try-except`, který zachytí jakoukoli výjimku.
+- **Crash Report**: Při pádu se automaticky vygeneruje soubor `crash_report.txt` s podrobným technickým popisem chyby (`traceback`).
+- **Error Popup**: Uživatel je o chybě informován prostřednictvím systémového vyskakovacího okna (využitím knihovny `tkinter`), i když hlavní grafické rozhraní Pygame přestane reagovat.
+
 ---
 
 ## 4. Uživatelská příručka
@@ -71,6 +78,9 @@ color = (ACCENT[0]+20, ACCENT[1]+20, ACCENT[2]+20) if is_hovered else CARD_BG
 2. **Průběh**: Uvidíte tři velká tlačítka s ikonami. Kliknutím levým tlačítkem myši provedete svůj tah.
 3. **Cíl**: Získejte co nejvyšší skóre. Skóre se ukládá po dobu běhu programu.
 4. **Ukončení**: Zavřete okno křížkem v horním rohu.
+5. **V případě chyby**: Pokud aplikace spadne, zkontrolujte soubor `crash_report.txt` v hlavním adresáři projektu.
+
+---
 
 ## 5. Správa aktiv a cest
 Obrázky jsou uloženy v podsložce `assets`. Aby program fungoval správně i po přesunu do jiné složky, používáme **dynamické určování absolutní cesty**:
@@ -91,4 +101,4 @@ else:
     surf = pygame.Surface((100, 100), pygame.SRCALPHA)
     pygame.draw.circle(surf, ACCENT, (50, 50), 40)
 ```
-Toto řešení zajišťuje maximální stabilitu aplikace (program nespadne s chybou `FileNotFoundError`) a přenositelnost mezi různými počítači/adresáři.
+Toto řešení zajišťuje maximální stabilitu aplikace a přenositelnost. Nově přidané globální ošetření chyb doplňuje tento mechanismus o ochranu proti pádům způsobeným jinými faktory (např. chybějící systémové fonty nebo ovladače).
