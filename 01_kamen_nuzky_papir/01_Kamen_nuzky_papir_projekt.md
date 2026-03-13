@@ -64,12 +64,18 @@ color = (ACCENT[0]+20, ACCENT[1]+20, ACCENT[2]+20) if is_hovered else CARD_BG
 ```
 *Vysvětlení:* Pokud se souřadnice myši nacházejí uvnitř obdélníku tlačítka, barva se mírně zesvětlí, což dává uživateli zpětnou vazbu.
 
-### 3.4 Zpracování chyb a pádů
-Aplikace obsahuje robustní systém pro zachycení neočekávaných chyb, který zabraňuje „tichému“ pádu programu bez vysvětlení.
+### 3.4 Tématické přepínání (Dark/Light mode)
+Hra nyní podporuje dva vizuální režimy:
+- **Dark Mode (výchozí)**: Optimalizováno pro šetření zraku, využívá tmavě modré a šedé odstíny.
+- **Light Mode**: Klasický světlý vzhled s vysokým kontrastem.
 
-- **Globální try-except**: Celý běh hry se nachází v bloku `try-except`, který zachytí jakoukoli výjimku.
-- **Crash Report**: Při pádu se automaticky vygeneruje soubor `crash_report.txt` s podrobným technickým popisem chyby (`traceback`).
-- **Error Popup**: Uživatel je o chybě informován prostřednictvím systémového vyskakovacího okna (využitím knihovny `tkinter`), i když hlavní grafické rozhraní Pygame přestane reagovat.
+### 3.5 Menu nastavení
+Nové rozhraní přístupné přes ikonu ozubeného kolečka v pravém horním rohu. Menu obsahuje:
+- **Změna motivu**: Přepínání barev za běhu.
+- **Reset skóre**: Vynuluje statistiky.
+- **Ukončení hry**: Bezpečné zavření aplikace.
+
+### 3.6 Zpracování chyb a pádů
 
 ---
 
