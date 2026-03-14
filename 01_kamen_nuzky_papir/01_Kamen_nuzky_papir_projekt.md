@@ -72,6 +72,7 @@ Hra nyní podporuje dva vizuální režimy:
 ### 3.5 Menu nastavení
 Nové rozhraní přístupné přes ikonu ozubeného kolečka v pravém horním rohu. Menu obsahuje:
 - **Změna motivu**: Přepínání barev za běhu.
+- **Neomezené FPS**: Možnost vypnout limit 60 FPS pro maximální výkon s ukazatelem aktuální snímkové frekvence v levém dolním rohu.
 - **Reset skóre**: Vynuluje statistiky.
 - **Ukončení hry**: Bezpečné zavření aplikace.
 

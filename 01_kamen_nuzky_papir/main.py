@@ -46,6 +46,8 @@ class Game:
         self.current_theme = "dark"
         self.colors = THEMES[self.current_theme]
         self.state = "playing" # playing, settings
+        self.unlimited_fps = False
+        self.current_fps = FPS
         
         # Load Assets
         self.assets = {}
@@ -74,10 +76,11 @@ class Game:
         
         # Settings Menu Buttons
         self.menu_buttons = [
-            {"id": "theme", "rect": pygame.Rect(WIDTH//2 - 130, 200, 260, 60), "label": "ZMĚNIT MOTIV"},
-            {"id": "reset", "rect": pygame.Rect(WIDTH//2 - 130, 280, 260, 60), "label": "RESETOVAT SKÓRE"},
-            {"id": "exit", "rect": pygame.Rect(WIDTH//2 - 130, 360, 260, 60), "label": "UKONČIT HRU"},
-            {"id": "back", "rect": pygame.Rect(WIDTH//2 - 130, 460, 260, 60), "label": "ZPĚT"}
+            {"id": "theme", "rect": pygame.Rect(WIDTH//2 - 140, 160, 280, 50), "label": "ZMĚNIT MOTIV"},
+            {"id": "fps", "rect": pygame.Rect(WIDTH//2 - 140, 230, 280, 50), "label": "NEOMEZENÉ FPS: VYP"},
+            {"id": "reset", "rect": pygame.Rect(WIDTH//2 - 140, 300, 280, 50), "label": "RESETOVAT SKÓRE"},
+            {"id": "exit", "rect": pygame.Rect(WIDTH//2 - 140, 370, 280, 50), "label": "UKONČIT HRU"},
+            {"id": "back", "rect": pygame.Rect(WIDTH//2 - 140, 450, 280, 50), "label": "ZPĚT"}
         ]
         
     def load_images(self):
@@ -135,6 +138,10 @@ class Game:
             self.draw_game()
         elif self.state == "settings":
             self.draw_settings()
+            
+        if self.unlimited_fps:
+            fps_text = self.font_small.render(f"FPS: {int(self.clock.get_fps())}", True, self.colors["text_dim"])
+            self.screen.blit(fps_text, (10, HEIGHT - 35))
             
         pygame.display.flip()
 
@@ -217,7 +224,11 @@ class Game:
             if btn["id"] in self.assets:
                 self.screen.blit(self.assets[btn["id"]], (btn["rect"].left + 15, btn["rect"].centery - 15))
             
-            label = self.font_small.render(btn["label"], True, text_color)
+            label_text = btn["label"]
+            if btn["id"] == "fps":
+                label_text = "NEOMEZENÉ FPS: ZAP" if self.unlimited_fps else "NEOMEZENÉ FPS: VYP"
+                
+            label = self.font_small.render(label_text, True, text_color)
             self.screen.blit(label, (btn["rect"].centerx - label.get_width()//2 + 15, btn["rect"].centery - label.get_height()//2))
 
     def run(self):
@@ -249,6 +260,9 @@ class Game:
                                         self.colors = THEMES[self.current_theme]
                                         # Update result color to match theme
                                         self.result_color = self.colors["text"]
+                                    elif btn["id"] == "fps":
+                                        self.unlimited_fps = not self.unlimited_fps
+                                        self.current_fps = 0 if self.unlimited_fps else FPS
                                     elif btn["id"] == "reset":
                                         self.player_score = 0
                                         self.computer_score = 0
@@ -262,7 +276,7 @@ class Game:
                                         self.state = "playing"
             
             self.draw()
-            self.clock.tick(FPS)
+            self.clock.tick(self.current_fps)
             
         pygame.quit()
         sys.exit()
