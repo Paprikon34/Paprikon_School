@@ -1,11 +1,16 @@
-# Kámen, nůžky, papír – Technická dokumentace
+# Kámen, nůžky, papír
 
 Tento dokument slouží jako podrobný průvodce kódem a strukturou projektu „Kámen, nůžky, papír“ s grafickým rozhraním v Pythonu.
 
-## 1. Popis a cíl projektu
+## Popis a cíl projektu
 Cílem bylo vytvořit moderní verzi klasické hry s využitím knihovny **Pygame**. Program je navržen tak, aby byl vizuálně atraktivní, intuitivně ovladatelný a technicky správně strukturovaný podle standardů studentské práce.
 
-## 2. Architektura programu
+## Funkcionalita programu
+Program je klasická hra "kámen, nůžky, papír" s grafickým rozhraním. Hráč volí kliknutím na interaktivní tlačítka s hover efekty. Podporuje Dark/Light mode, neomezené FPS a ukládání herní statistiky. Aplikace také bezpečně obsluhuje načítání grafických aktivních prvků a generuje náhradní grafiku v případě chybějících souborů.
+
+## Technická část
+
+### Architektura programu
 Program využívá **objektově orientované programování (OOP)**. Celá hra je zapouzdřena ve třídě `Game`, což zajišťuje přehlednost a snadnou správu stavu hry (skóre, herní volby).
 
 ### Použité technologie:
@@ -16,9 +21,9 @@ Program využívá **objektově orientované programování (OOP)**. Celá hra j
 
 ---
 
-## 3. Rozbor klíčových částí kódu
+### Rozbor klíčových částí kódu
 
-### 3.1 Inicializace a nastavení (`__init__`)
+#### Inicializace a nastavení (`__init__`)
 V této části nastavujeme okno, fonty a základní proměnné.
 ```python
 def __init__(self):
@@ -33,7 +38,7 @@ def __init__(self):
 ```
 *Proč toto řešení?* Použití `pygame.Rect` nám později umožňuje velmi jednoduše detekovat kolizi myši s tlačítkem.
 
-### 3.2 Herní logika (`play`)
+#### Herní logika (`play`)
 Tato funkce je srdcem hry. Spustí se pokaždé, když hráč klikne na tlačítko.
 ```python
 def play(self, player_choice):
@@ -54,7 +59,7 @@ def play(self, player_choice):
 ```
 *Vysvětlení:* Počítač si náhodně vybere z listu `["rock", "paper", "scissors"]`. Následně porovnáme volby pomocí podmínek, které pokrývají všechny tři možnosti výhry hráče. V ostatních případech (kromě remízy) vyhrává počítač.
 
-### 3.3 Vykreslovací smyčka (`draw`)
+#### Vykreslovací smyčka (`draw`)
 Zde vytváříme grafické rozhraní. Aplikujeme zde tzv. **double buffering** (funkce `pygame.display.flip()`), který zabraňuje blikání obrazu.
 - **Zpracování barev**: Používáme moderní hexadecimální převody do RGB (např. tmavé pozadí `(20, 24, 35)`).
 - **Hover efekt**: 
@@ -64,23 +69,23 @@ color = (ACCENT[0]+20, ACCENT[1]+20, ACCENT[2]+20) if is_hovered else CARD_BG
 ```
 *Vysvětlení:* Pokud se souřadnice myši nacházejí uvnitř obdélníku tlačítka, barva se mírně zesvětlí, což dává uživateli zpětnou vazbu.
 
-### 3.4 Tématické přepínání (Dark/Light mode)
+#### Tématické přepínání (Dark/Light mode)
 Hra nyní podporuje dva vizuální režimy:
 - **Dark Mode (výchozí)**: Optimalizováno pro šetření zraku, využívá tmavě modré a šedé odstíny.
 - **Light Mode**: Klasický světlý vzhled s vysokým kontrastem.
 
-### 3.5 Menu nastavení
+#### Menu nastavení
 Nové rozhraní přístupné přes ikonu ozubeného kolečka v pravém horním rohu. Menu obsahuje:
 - **Změna motivu**: Přepínání barev za běhu.
 - **Neomezené FPS**: Možnost vypnout limit 60 FPS pro maximální výkon s ukazatelem aktuální snímkové frekvence v levém dolním rohu.
 - **Reset skóre**: Vynuluje statistiky.
 - **Ukončení hry**: Bezpečné zavření aplikace.
 
-### 3.6 Zpracování chyb a pádů
+#### Zpracování chyb a pádů
 
 ---
 
-## 4. Uživatelská příručka
+### Uživatelská příručka
 1. **Spuštění**: Spusťte skript `main.py` ve složce projektu.
 2. **Průběh**: Uvidíte tři velká tlačítka s ikonami. Kliknutím levým tlačítkem myši provedete svůj tah.
 3. **Cíl**: Získejte co nejvyšší skóre. Skóre se ukládá po dobu běhu programu.
@@ -89,7 +94,7 @@ Nové rozhraní přístupné přes ikonu ozubeného kolečka v pravém horním r
 
 ---
 
-## 5. Správa aktiv a cest
+### Správa aktiv a cest
 Obrázky jsou uloženy v podsložce `assets`. Aby program fungoval správně i po přesunu do jiné složky, používáme **dynamické určování absolutní cesty**:
 
 ```python

@@ -18,7 +18,7 @@ Nejedná se o sloh "jak jsem klikal v editoru", ale o tzv. User Guide a technick
 Do skriptů a na GitHub nevkládejte, žádné osobní údaje (jméno, příjmení, e-mail, telefon, adresa atd.)!
 
 Postup práce a struktura repozitáře
-Výběr názvu: Vyberete si název projektu a zaznamenáte ho do hlavní tabulky v souboru README.md v kořeni repozitáře.
+Výběr názvu: Vyberete si název projektu a zaznamenáte ho do hlavní tabulky v souboru README.md v kořeni repozitáře. Jinými slovy stanovíte si cíl!
 Organizace souborů: Každý projekt musí mít svou vlastní samostatnou složku. Veškerý kód, modely a obrázky k danému projektu budou pouze uvnitř této složky (např. složka 01_snake).
 Dokumentace projektu: Projekt stručně popíšete a dokumentaci uložíte do souboru ve formátu:
 Název musí končit slovem _projekt.md (např. 01_Snake_hra_projekt.md).
