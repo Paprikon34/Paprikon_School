@@ -1,196 +1,67 @@
 import os
 import pygame
-import git
+import pygame.image
 
-# Nastavení projektu
-projekt_nazev = "Kámen, nůžky, papír"
-projekt_cel = "Implementace hry Kámen, nůžky, papír pomocí Pygame"
-
-# Inicializace Pygame
-pygame.init()
-
-# Nastavení velikosti okna
-okno_velikost = (800, 600)
-
-# Vytvoření okna
-okno = pygame.display.set_mode(okno_velikost)
-
-# Nastavení titulku okna
-pygame.display.set_caption(projekt_nazev)
-
-# Funkce pro načítání assetů
-def načit_asset(path):
+# Funkce pro načítání obrázku pomocí script-relative path
+def load_image(image_path):
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    asset_path = os.path.join(base_dir, 'assets', path)
-    return pygame.image.load(asset_path)
+    image_path = os.path.join(base_dir, 'assets', image_path)
+    return pygame.image.load(image_path)
 
-# Funkce pro načítání dokumentace
-def načit_dokumentace():
-    with open('README.md', 'r') as soubor:
-        dokumentace = soubor.read()
-    return dokumentace
+# Funkce pro načítání assetů pomocí script-relative path
+def load_assets():
+    rock_image = load_image('rock.png')
+    paper_image = load_image('paper.png')
+    scissors_image = load_image('scissors.png')
+    return rock_image, paper_image, scissors_image
 
-# Funkce pro načítání požadavků
-def načit_pozadavky():
-    with open('pozadavky.md', 'r') as soubor:
-        pozadavky = soubor.read()
-    return pozadavky
+# Funkce pro inicializaci projektu
+def init_project():
+    # Vytvoření prázdné dokumentace a hlavních souborů
+    with open('dokumentace.md', 'w') as f:
+        f.write('')
 
-# Funkce pro načítání projektové dokumentace
-def načit_projekt_dokumentace():
-    with open('01_Kamen_nuzky_papir_projekt.md', 'r') as soubor:
-        projekt_dokumentace = soubor.read()
-    return projekt_dokumentace
+    with open('main.py', 'w') as f:
+        f.write('')
 
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
+    # Přidání požadavků ke studentským pracím
+    with open('požadavky.md', 'w') as f:
+        f.write('')
 
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
+    # Přidání projektových souborů
+    with open('01_kamen_nuzky_papir/README.md', 'w') as f:
+        f.write('')
 
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
+    with open('01_kamen_nuzky_papir/main.py', 'w') as f:
+        f.write('')
 
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
+    with open('01_kamen_nuzky_papir/assets/rock.png', 'w') as f:
+        f.write('')
 
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
+    with open('01_kamen_nuzky_papir/assets/paper.png', 'w') as f:
+        f.write('')
 
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
+    with open('01_kamen_nuzky_papir/assets/scissors.png', 'w') as f:
+        f.write('')
 
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
+    # Přidání README s přehledem projektů a principy repozitáře
+    with open('README.md', 'w') as f:
+        f.write('')
 
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
+    # Aktualizace 01_Kamen_nuzky_papir_projekt.md
+    with open('01_Kamen_nuzky_papir_projekt.md', 'w') as f:
+        f.write('')
 
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
+# Inicializace projektu
+init_project()
 
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
+# Načtení assetů
+rock_image, paper_image, scissors_image = load_assets()
 
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
+# Uložení assetů do souborů
+rock_image.save('01_kamen_nuzky_papir/assets/rock.png')
+paper_image.save('01_kamen_nuzky_papir/assets/paper.png')
+scissors_image.save('01_kamen_nuzky_papir/assets/scissors.png')
 
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
 
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
-
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
-
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
-
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
-
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
-
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
-
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
-
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
-
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
-
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
-
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
-
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
-
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
-    with open('pozadavky_ke_studentskym_pracim.md', 'r') as soubor:
-        req_studentske_prace = soubor.read()
-    return req_studentske_prace
-
-# Funkce pro načítání požadavků ke studentským pracím
-def načit_req_studentske_prace():
+Poznámka: Tento kód pouze generuje prázdné soubory a neposkytuje žádné funkční kód pro hru "Kámen, nůžky, papír". Pro implementaci samotné hry budete muset přidat další kód.

@@ -1,3 +1,4 @@
+import sys
 import requests
 from bs4 import BeautifulSoup
 import time
@@ -119,6 +120,7 @@ def proved_git_commit(commit_zprava, pockat_hodin=0):
         print(f"⚠️ Git neměl co poslat nebo došlo k chybě: {e}")
 
 def main():
+    sys.stdout.reconfigure(encoding='utf-8')
     print(f"--- 🤖 Erudios Auto-Bot (Verze: GROQ) spuštěn (Cíl: {STUDENT_JMENO}) ---")
     
     if not GROQ_API_KEY:
