@@ -191,4 +191,25 @@ def main():
                 print(f"❌ Nelze zapsat: {e}")
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        import traceback
+        crash_dir = os.path.join(SCRIPT_DIR, "crash_reports")
+        os.makedirs(crash_dir, exist_ok=True)
+        crash_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        crash_file = os.path.join(crash_dir, f"crash_report_{crash_time}.txt")
+        
+        print(f"\n[!!! FATAL ERROR !!!] Aplikace spadla! Vytvářím crash report: {crash_file}")
+        try:
+            with open(crash_file, "w", encoding="utf-8") as f:
+                f.write(f"=== CRASH REPORT ===\n")
+                f.write(f"Čas: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                f.write(f"Chyba: {str(e)}\n\n")
+                f.write("=== TRACEBACK ===\n")
+                f.write(traceback.format_exc())
+            print("Crash report úspěšně vytvořen.")
+        except Exception as file_err:
+            print(f"Chyba při zapisování crash reportu: {file_err}")
+            print(traceback.format_exc())
+        sys.exit(1)
