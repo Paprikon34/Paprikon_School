@@ -29,9 +29,25 @@ HISTORIE_SOUBOR = os.path.join(SCRIPT_DIR, "zpracovane_odkazy.txt")
 CEKACI_DOBA_HODIN = 0
 # ===============================================
 
+"""
+Tento skript (bot) automaticky kontroluje web Erudios pro nové úkoly, 
+analyzuje je pomocí AI (Groq/Llama) a automaticky opravuje kód.
+
+This script (bot) automatically checks the Erudios website for new tasks,
+analyzes them using AI (Groq/Llama), and automatically fixes the code.
+"""
+
 
 def ask_groq(prompt, system_prompt="Jsi zkušený senior vývojář.", temperature=0.2):
-    """Pošle dotaz na obří super-model přes Groq API (stotisíckrát chytřejší než Ollama)."""
+    """
+    Odešle dotaz na Groq API.
+    Sends a query to the Groq API.
+    
+    Args:
+        prompt: Text dotazu / The query text.
+        system_prompt: Role pro AI / The role for the AI.
+        temperature: Míra kreativity (0 = přesné, 1 = kreativní) / Creativity level.
+    """
     print("🧠 Cloudový Mozek (Groq) přemýšlí...")
     try:
         chat_completion = client.chat.completions.create(
@@ -54,19 +70,28 @@ def ask_groq(prompt, system_prompt="Jsi zkušený senior vývojář.", temperatu
         return None
 
 def nacti_historii():
-    """Načte odkazy, které už bot dříve splnil a odevzdal."""
+    """
+    Načte seznam již zpracovaných odkazů ze souboru.
+    Loads the list of already processed links from a file.
+    """
     if os.path.exists(HISTORIE_SOUBOR):
         with open(HISTORIE_SOUBOR, "r", encoding="utf-8") as f:
             return set(f.read().splitlines())
     return set()
 
 def uloz_do_historie(link):
-    """Zaznamená, že na linku už bot pracoval."""
+    """
+    Uloží zpracovaný odkaz do historie, aby se neopakoval.
+    Saves the processed link to history to avoid duplication.
+    """
     with open(HISTORIE_SOUBOR, "a", encoding="utf-8") as f:
         f.write(link + "\n")
 
 def najdi_kritiku(url):
-    """Prohledá web a najde odkaz obsahující 'Paprikon34'."""
+    """
+    Prohledá web a najde odkazy, které se týkají studenta.
+    Scans the web and finds links related to the student.
+    """
     print(f"🌐 Hledám nové hodnocení/kritiku pro '{STUDENT_JMENO}' na adrese {url} ...")
     try:
         response = requests.get(url)
@@ -89,7 +114,10 @@ def najdi_kritiku(url):
     return set(nalezene_odkazy)
 
 def stahni_text(url):
-    """Stáhne všechny instrukce a text z konkrétní podstránky s hodnocením."""
+    """
+    Stáhne a vyčistí text (zadání) z konkrétní URL.
+    Downloads and cleans the text (assignment) from a specific URL.
+    """
     print(f"📖 Stahuji zadání z odkazu: {url} ...")
     try:
         response = requests.get(url)
@@ -104,7 +132,14 @@ def stahni_text(url):
     return soup.get_text(separator='\n', strip=True)
 
 def proved_git_commit(commit_zprava, pockat_hodin=0):
-    """Tato funkce automatizuje Git a obchází 12h pravidlo."""
+    """
+    Automatizuje proces odeslání změn na GitHub.
+    Automates the process of pushing changes to GitHub.
+    
+    Args:
+        commit_zprava: Zpráva pro commit / Commit message.
+        pockat_hodin: Čas, po který má bot čekat před odesláním / Delay in hours.
+    """
     if pockat_hodin > 0:
         print(f"⏳ Čekám {pockat_hodin} hodin dle školních pravidel...")
         time.sleep(pockat_hodin * 3600)
@@ -172,11 +207,14 @@ def main():
         
         if opraveny_kod:
             # Uložení kódu
+            # Určení cesty pro uložení / Determining the save path
             if "nerozpoznano" not in odhad_souboru:
-                adresar = os.path.dirname(odhad_souboru)
-                soubor = os.path.basename(odhad_souboru)
+                adresar = os.path.dirname(odhad_souboru) # Např. 01_kamen_nuzky_papir
+                soubor = os.path.basename(odhad_souboru) # Např. main.py
+                # Uložíme jako "edited_main.py" vedle originálu
                 cesta = os.path.join(REPO_ROOT, adresar, f"edited_{soubor}")
             else:
+                # Pokud nevíme kam, uložíme do kořene
                 cesta = os.path.join(REPO_ROOT, "novy_kod_z_hodnoceni.py")
                 
             try:
