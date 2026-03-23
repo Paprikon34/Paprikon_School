@@ -172,12 +172,18 @@ def main():
         
         if opraveny_kod:
             # Uložení kódu
-            cesta = os.path.join(REPO_ROOT, odhad_souboru if "nerozpoznano" not in odhad_souboru else "novy_kod_z_hodnoceni.py")
+            if "nerozpoznano" not in odhad_souboru:
+                adresar = os.path.dirname(odhad_souboru)
+                soubor = os.path.basename(odhad_souboru)
+                cesta = os.path.join(REPO_ROOT, adresar, f"edited_{soubor}")
+            else:
+                cesta = os.path.join(REPO_ROOT, "novy_kod_z_hodnoceni.py")
+                
             try:
                 os.makedirs(os.path.dirname(cesta), exist_ok=True)
                 with open(cesta, "w", encoding="utf-8") as f:
                     f.write(opraveny_kod)
-                print(f"💾 Přepsáno a uloženo do: {cesta}")
+                print(f"💾 Nový kód uložen do: {cesta}")
                 
                 # Commit zpráva
                 prompt_commit = f"Tohle se změnilo v kódu:\n{opraveny_kod[:500]}\nNapíšeš mi jednovětou git commit zprávu česky v trpném rodě a minulém čase? POUZE zprávu bez uvozovek."

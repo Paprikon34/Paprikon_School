@@ -41,9 +41,9 @@ def __init__(self):
 #### Herní logika (`play`)
 Tato funkce je srdcem hry. Spustí se pokaždé, když hráč klikne na tlačítko.
 ```python
-def play(self, player_choice):
+def play(self, player_choice: str):
     self.last_player_choice = player_choice
-    self.last_computer_choice = random.choice(self.choices)
+    self.last_computer_choice = random.choice(CHOICES)
     
     # Logika vyhodnocení vítěze
     if self.last_player_choice == self.last_computer_choice:
@@ -64,10 +64,10 @@ Zde vytváříme grafické rozhraní. Aplikujeme zde tzv. **double buffering** (
 - **Zpracování barev**: Používáme moderní hexadecimální převody do RGB (např. tmavé pozadí `(20, 24, 35)`).
 - **Hover efekt**: 
 ```python
-is_hovered = btn["rect"].collidepoint(mouse_pos)
-color = (ACCENT[0]+20, ACCENT[1]+20, ACCENT[2]+20) if is_hovered else CARD_BG
+is_hovered = btn["rect"].collidepoint(mouse_pos) and not self.in_settings
+color = theme["highlight"] if is_hovered else theme["card_bg"]
 ```
-*Vysvětlení:* Pokud se souřadnice myši nacházejí uvnitř obdélníku tlačítka, barva se mírně zesvětlí, což dává uživateli zpětnou vazbu.
+*Vysvětlení:* Pokud se souřadnice myši nacházejí uvnitř obdélníku tlačítka (a současně nejsme v menu nastavení), tlačítko se vybarví světlejší barvou z aktuálního motivu (`highlight`), což dává uživateli zpětnou vazbu.
 
 #### Tématické přepínání (Dark/Light mode)
 Hra nyní podporuje dva vizuální režimy:
@@ -106,11 +106,19 @@ path = os.path.join(base_dir, "assets", f"{choice}.png")
 
 Pokud by soubor přesto chyběl (např. smazání uživatelem), kód obsahuje **fallback mechanismus**:
 ```python
-if os.path.exists(path):
-    img = pygame.image.load(path).convert_alpha()
-else:
-    # Dynamické vytvoření barevného kruhu jako náhrady, aby program nespadl
-    surf = pygame.Surface((100, 100), pygame.SRCALPHA)
-    pygame.draw.circle(surf, ACCENT, (50, 50), 40)
+    def load_asset(self, filename, size):
+        path = get_asset_path(filename)
+        if os.path.exists(path):
+            try:
+                img = pygame.image.load(path).convert_alpha()
+                return pygame.transform.smoothscale(img, size)
+            except Exception:
+                pass
+        return self.create_fallback_surface(size)
+        
+    def create_fallback_surface(self, size):
+        surf = pygame.Surface(size, pygame.SRCALPHA)
+        pygame.draw.circle(surf, (150, 150, 150), (size[0]//2, size[1]//2), size[0]//2 - 5)
+        return surf
 ```
 Toto řešení zajišťuje maximální stabilitu aplikace a přenositelnost. Nově přidané globální ošetření chyb doplňuje tento mechanismus o ochranu proti pádům způsobeným jinými faktory (např. chybějící systémové fonty nebo ovladače).
