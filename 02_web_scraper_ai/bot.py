@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from groq import Groq
 
 # Načtení skrytého API klíče
+# API klíč je uložen v souboru .env ktery neni verejny na githubu
 load_dotenv()
 
 # ================= KONFIGURACE =================
