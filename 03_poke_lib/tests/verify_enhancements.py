@@ -2,7 +2,10 @@ import json
 
 def verify_pokemon_data():
     try:
-        with open('pokemon.json', 'r') as f:
+        import os
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        data_path = os.path.join(script_dir, "..", "pokemon.json")
+        with open(data_path, 'r') as f:
             data = json.load(f)
     except Exception as e:
         print(f"Error loading pokemon.json: {e}")

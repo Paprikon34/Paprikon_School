@@ -5,10 +5,28 @@ import os
 import concurrent.futures
 import threading
 
+"""
+fetch_pokedata.py
+-----------------
+A multithreaded web scraper for fetching comprehensive Pokemon data from PokeAPI.
+This script populates 'pokemon.json' with enriched data including:
+- Base stats, height, weight, and abilities.
+- Dynamically calculated weaknesses based on type combinations.
+- Evolution chains and alternative forms (Megas, regional variants).
+- Pokedex entries (flavor text) from across different game versions.
+- Encounter locations and capture rates.
+
+Architecture:
+Uses 'concurrent.futures.ThreadPoolExecutor' to fetch data for multiple species 
+simultaneously, significantly reducing processing time from hours to minutes.
+"""
+
 # Constants
 # Constants for API and output
 POKEAPI_BASE = "https://pokeapi.co/api/v2"  # Base URL for the PokeAPI
-OUTPUT_FILE = "pokemon.json"                # Name of the output file where data will be saved
+import os
+script_dir = os.path.dirname(os.path.abspath(__file__))
+OUTPUT_FILE = os.path.join(script_dir, "pokemon.json")  # Path to the output file where data will be saved
 MAX_WORKERS = 10                            # Number of parallel threads for fetching data
 
 # Generation to Region mapping
@@ -26,14 +44,17 @@ REGION_MAP = {
 
 TYPE_CHART = {}
 EVO_CACHE = {}
-CACHE_LOCK = threading.Lock()
-DATA_LOCK = threading.Lock()
-PRINT_LOCK = threading.Lock()
+# Threading locks to ensure data integrity when multiple threads write to shared resources
+CACHE_LOCK = threading.Lock() # Protects EVO_CACHE from concurrent writes
+DATA_LOCK = threading.Lock()  # Protects the final pokemon_data dictionary
+PRINT_LOCK = threading.Lock() # Ensures console output from different threads doesn't overlap
 
 def safe_print(msg):
     """
-    Thread-safe print function that ensures messages from different threads 
-    don't mix on the same line.
+    Thread-safe print function.
+    In a multithreaded environment, standard 'print' can sometimes result in 
+    interleaved output if two threads print at the exact same millisecond. 
+    This lock-based wrapper prevents that.
     """
     with PRINT_LOCK:
         print(msg)
@@ -46,19 +67,22 @@ def get_json(url):
     retries = 3
     while retries > 0:
         try:
+            # Set a 10s timeout to avoid hanging on slow network responses
             response = requests.get(url, timeout=10)
             if response.status_code == 200:
                 return response.json()
             elif response.status_code == 429:
-                # If rate limited, wait a second and retry
+                # 429 means we are hitting the API too fast (rate limited)
+                # Wait 1 second before retrying to respect the server's limits
                 time.sleep(1)
+                retries -= 1
                 continue
             else:
                 safe_print(f"Error fetching {url}: {response.status_code}")
                 return None
         except Exception as e:
             safe_print(f"Exception fetching {url}: {e}")
-            return None
+            retries -= 1
     return None
 
 def build_type_chart():
@@ -112,6 +136,7 @@ def calculate_weaknesses(def_types):
             
     weaknesses = []
     for t, mult in multipliers.items():
+        # A weakness is defined as having a multiplier of 2.0 or 4.0 (for dual types)
         if mult >= 2.0:
             weaknesses.append(f"{t} ({mult}x)")
     
@@ -162,7 +187,9 @@ def process_pokemon(entry, total, idx, current_data):
     """
     name = entry['name']
     
-    # Force update mode: fetch data even if it might already exist
+    # Force update mode: fetch data even if it might already exist.
+    # We can skip already fetched entries by checking current_data.get(name) 
+    # if we want to implement resuming a partially finished run.
     needs_update = True 
     
     if not needs_update:
@@ -199,6 +226,7 @@ def process_pokemon(entry, total, idx, current_data):
             if description == "No description available.":
                 description = text
             
+            # Store all version-specific texts for the "Entries" tab in the GUI
             entries_list.append({"version": version, "text": text})
 
     egg_groups = [g['name'] for g in species_details.get('egg_groups', [])]
@@ -213,28 +241,27 @@ def process_pokemon(entry, total, idx, current_data):
         v_name = var['pokemon']['name']
         v_url = var['pokemon']['url']
         
+        # --- Variety Specific Details ---
         # Fetch specific details for this variety (stats, types, abilities, sprites)
         pokemon_details = get_json(v_url)
         if not pokemon_details:
             continue
 
+        # Extract basic info
         types = [t['type']['name'] for t in pokemon_details['types']]
+        abilities = [{"name": ab['ability']['name'], "is_hidden": ab['is_hidden']} for ab in pokemon_details['abilities']]
         
-        abilities = []
-        for ab in pokemon_details['abilities']:
-            abilities.append({
-                "name": ab['ability']['name'],
-                "is_hidden": ab['is_hidden']
-            })
-            
+        # Enrichment: calculate double/half damage based on type relation table
         weaknesses = calculate_weaknesses(types)
         
+        # --- Stats & Physical Attributes ---
         # Extract base stats (HP, Attack, etc.)
         stats = {s['stat']['name']: s['base_stat'] for s in pokemon_details['stats']}
         # Convert API units (dm, hg) to standard units (m, kg)
         height = pokemon_details['height'] / 10.0
         weight = pokemon_details['weight'] / 10.0
         
+        # --- Media (Sprites) ---
         # Prefer high-quality official artwork sprites
         sprite = pokemon_details['sprites'].get('other', {}).get('official-artwork', {}).get('front_default')
         if not sprite:
@@ -246,7 +273,8 @@ def process_pokemon(entry, total, idx, current_data):
 
         base_experience = pokemon_details.get('base_experience')
 
-        # Move list processing: split into level-up and other methods
+        # --- Learning Moves ---
+        # Move list processing: split into level-up and other methods (TM, Tutor)
         moves = []
         raw_moves = pokemon_details.get('moves', [])
         level_moves = []
@@ -336,6 +364,8 @@ def main():
         except Exception as e:
             safe_print(f"Error loading existing file: {e}")
 
+    # Each species entry points to one or more "varieties" 
+    # (e.g. Charizard has Charizard-Mega-X, Charizard-Mega-Y, etc.)
     results = species_list_resp['results']
     total = len(results)
     safe_print(f"Total species to process: {total} with {MAX_WORKERS} workers")
@@ -363,7 +393,8 @@ def main():
                         if completed % 10 == 0:
                             safe_print(f"Progress: {completed}/{total} species processed")
                         
-                        # Intermediate save every 50 species to prevent data loss or provide immediate usability
+                        # Intermediate save every 50 species to prevent data loss 
+                        # This allows the GUI to be usable even if the fetch script is killed.
                         if completed % 50 == 0:
                             with open(OUTPUT_FILE, 'w') as f:
                                 json.dump(pokemon_data, f, indent=2)
