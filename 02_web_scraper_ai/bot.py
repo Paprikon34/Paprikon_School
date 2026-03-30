@@ -195,8 +195,22 @@ def main():
             
         print(f"🔎 AI si myslí, že potřebujeme upravit hru/soubor: {odhad_souboru}")
         
+        stavajici_kod = ""
+        cesta_k_souboru = os.path.join(REPO_ROOT, odhad_souboru)
+        if "nerozpoznano" not in odhad_souboru and os.path.exists(cesta_k_souboru):
+            try:
+                with open(cesta_k_souboru, "r", encoding="utf-8") as f:
+                    stavajici_kod = f.read()
+                print(f"📖 Původní kód úspěšně načten z {odhad_souboru}.")
+            except Exception as e:
+                print(f"⚠️ Nelze přečíst původní soubor: {e}")
+
         # Samotný kód
-        prompt_kod = f"Toto je IT zadání od učitele:\n\n{text_zadani[:2000]}\n\nNapiš mi pouze kompletní funkční kód v Pythonu, který problém vyřeší. Bez žádného vysvětlování, vygeneruj čístý kód připravený k uložení."
+        if stavajici_kod:
+            prompt_kod = f"Toto je současný kód v souboru {odhad_souboru}:\n```python\n{stavajici_kod}\n```\n\nToto je kritika/zadání od učitele:\n\n{text_zadani[:2000]}\n\nUprav současný kód tak, aby vyřešil problémy zmíněné v kritice. ZACHOVEJ zbytek kódu nedotčený. Napiš mi VÝHRADNĚ kompletní funkční kód v Pythonu (celý upravený soubor). Bez žádného dodatečného vysvětlování, vygeneruj čistý kód."
+        else:
+            prompt_kod = f"Toto je IT zadání od učitele:\n\n{text_zadani[:2000]}\n\nNapiš mi pouze kompletní funkční kód v Pythonu, který problém vyřeší. Bez žádného vysvětlování, vygeneruj čístý kód připravený k uložení."
+        
         opraveny_kod = ask_groq(prompt_kod, system_prompt="Jsi senior Python inženýr.")
         
         if opraveny_kod is None:
