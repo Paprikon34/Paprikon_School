@@ -3,6 +3,9 @@ import os      # Práce se soubory a cestami / File and path management
 import random  # Náhodný výběr pro počítač / Random choice for the PC
 import pygame  # Hlavní knihovna pro tvorbu her / Main game library
 import sys     # Systémové funkce (např. ukončení programu) / System functions
+from typing import Optional, List, Dict, Any, Union, cast # Typové anotace / Type hints
+
+
 
 # Skryje zprávu o verzi Pygame v konzoli / Hides the Pygame version message
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
@@ -64,11 +67,12 @@ class Game:
         self.fps_cap = 60           # Limit snímků za sekundu
         self.in_settings = False    # Je otevřené menu nastavení?
         
-        self.player_score = 0       # Body hráče
-        self.computer_score = 0     # Body počítače
-        self.last_player_choice = None   # Poslední tah hráče
-        self.last_computer_choice = None # Poslední tah počítače
-        self.result_text = "Vyber si svůj tah!" # Text uprostřed obrazovky
+        self.player_score: int = 0       # Body hráče
+        self.computer_score: int = 0     # Body počítače
+        self.last_player_choice: Optional[str] = None   # Poslední tah hráče
+        self.last_computer_choice: Optional[str] = None # Poslední tah počítače
+        self.result_text: str = "Vyber si svůj tah!" # Text uprostřed obrazovky
+
         
         # Načtení písem (fontů) / Load fonts
         try:
@@ -86,11 +90,12 @@ class Game:
         self.load_all_assets()
         
         # --- UI LAYOUT ---
-        self.buttons = [
+        self.buttons: List[Dict[str, Any]] = [
             {"id": "rock", "rect": pygame.Rect(100, 420, 180, 140)},
             {"id": "paper", "rect": pygame.Rect(310, 420, 180, 140)},
             {"id": "scissors", "rect": pygame.Rect(520, 420, 180, 140)}
         ]
+
         
         self.settings_btn_rect = pygame.Rect(WINDOW_WIDTH - 65, 25, 40, 40)
         
@@ -100,12 +105,13 @@ class Game:
         gap = 75
         cx = WINDOW_WIDTH // 2 - btn_w // 2
         
-        self.settings_buttons = [
+        self.settings_buttons: List[Dict[str, Any]] = [
             {"id": "theme", "rect": pygame.Rect(cx, start_y, btn_w, btn_h), "label": "Přepnout motiv"},
             {"id": "fps", "rect": pygame.Rect(cx, start_y + gap, btn_w, btn_h), "label": "Neomezené FPS: Vyp"},
             {"id": "reset", "rect": pygame.Rect(cx, start_y + gap*2, btn_w, btn_h), "label": "Reset skóre"},
             {"id": "exit", "rect": pygame.Rect(cx, start_y + gap*3, btn_w, btn_h), "label": "Ukončit hru"}
         ]
+
         
     def load_all_assets(self):
         """
@@ -181,8 +187,12 @@ class Game:
                         else:
                             # Kontrola, jestli jsi klikl na tlačítko Kámen, Nůžky nebo Papír
                             for btn in self.buttons:
-                                if btn["rect"].collidepoint(mouse_pos):
-                                    self.play(btn["id"])
+                                # Explicitly ensure we have a dict with a Rect
+                                if isinstance(btn, dict) and "rect" in btn:
+                                    rect = btn["rect"]
+                                    if hasattr(rect, "collidepoint") and rect.collidepoint(mouse_pos):
+                                        self.play(btn["id"])
+
                     else:
                         # Pokud jsme v NESTAVENÍ / Handling settings menu
                         if self.settings_btn_rect.collidepoint(mouse_pos):
@@ -234,15 +244,24 @@ class Game:
         
         # --- UI: BATTLE AREA (Zobrazení vybraných tahů) ---
         # Pokud už proběhlo kolo, ukážeme co kdo hodil
-        if self.last_player_choice and self.last_computer_choice:
-            p_img = self.assets[self.last_player_choice] # Obrázek tvého tahu
-            self.screen.blit(p_img, (WINDOW_WIDTH // 2 - 160, 200))
+        if self.last_player_choice is not None and self.last_computer_choice is not None:
+            # Narrow types for the type checker
+            p_choice = cast(str, self.last_player_choice)
+            c_choice = cast(str, self.last_computer_choice)
+            
+            p_img = self.assets.get(p_choice) # Obrázek tvého tahu
+            if p_img:
+                self.screen.blit(p_img, (WINDOW_WIDTH // 2 - 160, 200))
             
             vs_surf = self.text_font.render("VS", True, (150, 150, 150))
             self.screen.blit(vs_surf, (WINDOW_WIDTH // 2 - 15, 235))
             
-            c_img = self.assets[self.last_computer_choice] # Obrázek PC tahu
-            self.screen.blit(c_img, (WINDOW_WIDTH // 2 + 60, 200))
+            c_img = self.assets.get(c_choice) # Obrázek PC tahu
+            if c_img:
+                self.screen.blit(c_img, (WINDOW_WIDTH // 2 + 60, 200))
+
+
+
         
         # --- UI: RESULT MESSAGE (Text s výsledkem) ---
         # Např. "Vyhrál jsi!" nebo "Remíza!"
@@ -253,23 +272,31 @@ class Game:
         # --- UI: GAME BUTTONS (Tlačítka pro volbu: Kámen, Nůžky, Papír) ---
         mouse_pos = pygame.mouse.get_pos()
         for btn in self.buttons:
-            is_hovered = btn["rect"].collidepoint(mouse_pos) and not self.in_settings
+            # Check if rect attribute is available and call collidepoint safely
+            rect = btn.get("rect")
+            if rect is None: continue
+            
+            is_hovered = hasattr(rect, "collidepoint") and rect.collidepoint(mouse_pos) and not self.in_settings
             color = theme["highlight"] if is_hovered else theme["card_bg"]
             
             # Shadow (Stín tlačítka)
-            shadow_rect = btn["rect"].copy()
-            shadow_rect.y += 4
-            pygame.draw.rect(self.screen, theme["shadow"], shadow_rect, border_radius=12)
+            if hasattr(rect, "copy"):
+                shadow_rect = rect.copy()
+                shadow_rect.y += 4
+                pygame.draw.rect(self.screen, theme["shadow"], shadow_rect, border_radius=12)
             
             # Main Button (Samotné tlačítko)
-            pygame.draw.rect(self.screen, color, btn["rect"], border_radius=12)
+            pygame.draw.rect(self.screen, color, rect, border_radius=12)
             if is_hovered:
-                pygame.draw.rect(self.screen, theme["accent"], btn["rect"], 2, border_radius=12)
+                pygame.draw.rect(self.screen, theme["accent"], rect, 2, border_radius=12)
             
             # Asset (Obrázek tahu)
-            img = self.assets[btn["id"]]
-            img_rect = img.get_rect(center=btn["rect"].center)
-            self.screen.blit(img, img_rect)
+            img = self.assets.get(btn["id"])
+            if img:
+                img_rect = img.get_rect(center=rect.center)
+                self.screen.blit(img, img_rect)
+
+
             
         # --- UI: SETTINGS ICON (Ikona ozubeného kolečka) ---
         set_hover = self.settings_btn_rect.collidepoint(mouse_pos) and not self.in_settings
@@ -297,27 +324,37 @@ class Game:
 
             # Tlačítka v nastavení / Buttons in settings
             for btn in self.settings_buttons:
-                is_hovered = btn["rect"].collidepoint(mouse_pos)
+                rect = btn.get("rect")
+                if rect is None: continue
+                
+                is_hovered = hasattr(rect, "collidepoint") and rect.collidepoint(mouse_pos)
                 b_color = theme["highlight"] if is_hovered else theme["bg"]
                 
-                pygame.draw.rect(self.screen, b_color, btn["rect"], border_radius=10)
+                pygame.draw.rect(self.screen, b_color, rect, border_radius=10)
                 if is_hovered:
-                    pygame.draw.rect(self.screen, theme["accent"], btn["rect"], 1, border_radius=10)
+                    pygame.draw.rect(self.screen, theme["accent"], rect, 1, border_radius=10)
                 
                 # Check if icon exists and draw it
                 if btn["id"] in self.assets:
                     icon = self.assets[btn["id"]]
-                    self.screen.blit(icon, (btn["rect"].left + 20, btn["rect"].centery - icon.get_height()//2))
-                    lbl_x = btn["rect"].left + 65
+                    # Safe access to rect properties
+                    if icon and hasattr(rect, "left") and hasattr(rect, "centery"):
+                        self.screen.blit(icon, (rect.left + 20, rect.centery - icon.get_height()//2))
+                        lbl_x = rect.left + 65
+                    else:
+                        lbl_x = rect.centerx # Use rect centerx as fallback
                 else:
-                    lbl_x = btn["rect"].centerx
+                    lbl_x = rect.centerx
+
                 
                 # Text na tlačítku / Button text
                 lbl_surf = self.text_font.render(btn["label"], True, theme["text"])
-                if btn["id"] in self.assets:
-                    self.screen.blit(lbl_surf, (lbl_x, btn["rect"].centery - lbl_surf.get_height()//2))
+                if btn["id"] in self.assets and self.assets[btn["id"]]:
+                    self.screen.blit(lbl_surf, (lbl_x, rect.centery - lbl_surf.get_height()//2))
                 else:
-                    self.screen.blit(lbl_surf, lbl_surf.get_rect(center=btn["rect"].center))
+                    self.screen.blit(lbl_surf, lbl_surf.get_rect(center=rect.center))
+
+
 
         # --- UI: FPS (Počítadlo snímků za sekundu) ---
         fps_text = f"FPS: {int(self.clock.get_fps())}"

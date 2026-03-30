@@ -155,7 +155,12 @@ def proved_git_commit(commit_zprava, pockat_hodin=0):
         print(f"⚠️ Git neměl co poslat nebo došlo k chybě: {e}")
 
 def main():
-    sys.stdout.reconfigure(encoding='utf-8')
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8')
+    else:
+        import io
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
     print(f"--- 🤖 Erudios Auto-Bot (Verze: GROQ) spuštěn (Cíl: {STUDENT_JMENO}) ---")
     
     if not GROQ_API_KEY:
@@ -225,7 +230,9 @@ def main():
                 
                 # Commit zpráva
                 prompt_commit = f"Tohle se změnilo v kódu:\n{opraveny_kod[:500]}\nNapíšeš mi jednovětou git commit zprávu česky v trpném rodě a minulém čase? POUZE zprávu bez uvozovek."
-                commit_zprava = ask_groq(prompt_commit, "Git expert.").strip("\"'")
+                res_commit = ask_groq(prompt_commit, "Git expert.")
+                commit_zprava = res_commit.strip("\"'") if res_commit else "Automatická oprava kódu"
+
                 
                 # Zpožděný commit
                 proved_git_commit(commit_zprava, pockat_hodin=CEKACI_DOBA_HODIN)

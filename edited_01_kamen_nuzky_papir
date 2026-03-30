@@ -1,0 +1,248 @@
+import os
+import re
+import random
+import pygame
+import sys
+import logging
+
+# Nastavení logování
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+# Funkce pro načítání a tvorbu náhradních povrchů
+def create_surface(width, height):
+    return pygame.Surface((width, height))
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def load_asset(path):
+    try:
+        return pygame.image.load(path)
+    except Exception as e:
+        logging.warning(f"Chyba při načítání assetu: {e}")
+        return create_surface(1, 1)
+
+# Funkce pro načítání a tvorbu náhradních povrchů
+def load_font(path):
+    try:
+        return pygame.font.Font(path, 24)
+    except Exception as e:
+        logging.warning(f"Chyba při načítání fontu: {e}")
+        return create_surface(1, 1)
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def load_assets():
+    assets = {}
+    for file in os.listdir("assets"):
+        path = os.path.join("assets", file)
+        assets[file] = load_asset(path)
+    return assets
+
+# Funkce pro načítání a tvorbu náhradních povrchů
+def create_game_surface(width, height):
+    return create_surface(width, height)
+
+# Funkce pro načítání a tvorbu náhradních povrchů
+def create_game_font():
+    return load_font("font.ttf")
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def load_game_assets():
+    return load_assets()
+
+# Funkce pro načítání a tvorbu náhradních povrchů
+def load_game_font():
+    return create_game_font()
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def load_settings():
+    try:
+        with open("settings.txt", "r") as f:
+            return f.read()
+    except Exception as e:
+        logging.warning(f"Chyba při načítání nastavení: {e}")
+        return ""
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def save_settings(settings):
+    try:
+        with open("settings.txt", "w") as f:
+            f.write(settings)
+    except Exception as e:
+        logging.warning(f"Chyba při ukládání nastavení: {e}")
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def load_game_state():
+    try:
+        with open("game_state.txt", "r") as f:
+            return f.read()
+    except Exception as e:
+        logging.warning(f"Chyba při načítání stavu hry: {e}")
+        return ""
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def save_game_state(state):
+    try:
+        with open("game_state.txt", "w") as f:
+            f.write(state)
+    except Exception as e:
+        logging.warning(f"Chyba při ukládání stavu hry: {e}")
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def load_bot_save():
+    try:
+        with open("bot_save.txt", "r") as f:
+            return f.read()
+    except Exception as e:
+        logging.warning(f"Chyba při načítání uložení bota: {e}")
+        return ""
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def save_bot_save(save):
+    try:
+        with open("bot_save.txt", "w") as f:
+            f.write(save)
+    except Exception as e:
+        logging.warning(f"Chyba při ukládání uložení bota: {e}")
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def load_repaired_code():
+    try:
+        with open("repaired_code.txt", "r") as f:
+            return f.read()
+    except Exception as e:
+        logging.warning(f"Chyba při načítání opraveného kódu: {e}")
+        return ""
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def save_repaired_code(code):
+    try:
+        with open("repaired_code.txt", "w") as f:
+            f.write(code)
+    except Exception as e:
+        logging.warning(f"Chyba při ukládání opraveného kódu: {e}")
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def load_new_code():
+    try:
+        with open("new_code.txt", "r") as f:
+            return f.read()
+    except Exception as e:
+        logging.warning(f"Chyba při načítání nového kódu: {e}")
+        return ""
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def save_new_code(code):
+    try:
+        with open("new_code.txt", "w") as f:
+            f.write(code)
+    except Exception as e:
+        logging.warning(f"Chyba při ukládání nového kódu: {e}")
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def load_edited_code():
+    try:
+        with open("edited_code.txt", "r") as f:
+            return f.read()
+    except Exception as e:
+        logging.warning(f"Chyba při načítání editovaného kódu: {e}")
+        return ""
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def save_edited_code(code):
+    try:
+        with open("edited_code.txt", "w") as f:
+            f.write(code)
+    except Exception as e:
+        logging.warning(f"Chyba při ukládání editovaného kódu: {e}")
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def load_fallback_code():
+    try:
+        with open("fallback_code.txt", "r") as f:
+            return f.read()
+    except Exception as e:
+        logging.warning(f"Chyba při načítání fallback kódu: {e}")
+        return ""
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def save_fallback_code(code):
+    try:
+        with open("fallback_code.txt", "w") as f:
+            f.write(code)
+    except Exception as e:
+        logging.warning(f"Chyba při ukládání fallback kódu: {e}")
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def load_model_output():
+    try:
+        with open("model_output.txt", "r") as f:
+            return f.read()
+    except Exception as e:
+        logging.warning(f"Chyba při načítání modelu: {e}")
+        return ""
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def save_model_output(output):
+    try:
+        with open("model_output.txt", "w") as f:
+            f.write(output)
+    except Exception as e:
+        logging.warning(f"Chyba při ukládání modelu: {e}")
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def load_settings_interactions():
+    try:
+        with open("settings_interactions.txt", "r") as f:
+            return f.read()
+    except Exception as e:
+        logging.warning(f"Chyba při načítání interakcí nastavení: {e}")
+        return ""
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def save_settings_interactions(interactions):
+    try:
+        with open("settings_interactions.txt", "w") as f:
+            f.write(interactions)
+    except Exception as e:
+        logging.warning(f"Chyba při ukládání interakcí nastavení: {e}")
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def load_game_ui():
+    try:
+        with open("game_ui.txt", "r") as f:
+            return f.read()
+    except Exception as e:
+        logging.warning(f"Chyba při načítání UI hry: {e}")
+        return ""
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def save_game_ui(ui):
+    try:
+        with open("game_ui.txt", "w") as f:
+            f.write(ui)
+    except Exception as e:
+        logging.warning(f"Chyba při ukládání UI hry: {e}")
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def load_hover_logic():
+    try:
+        with open("hover_logic.txt", "r") as f:
+            return f.read()
+    except Exception as e:
+        logging.warning(f"Chyba při načítání logiky hover: {e}")
+        return ""
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def save_hover_logic(logic):
+    try:
+        with open("hover_logic.txt", "w") as f:
+            f.write(logic)
+    except Exception as e:
+        logging.warning(f"Chyba při ukládání logiky hover: {e}")
+
+# Funkce pro bezpečné načítání assetů s fallbacky
+def load_game_state_and_ui():
+    try:
+        with open("game_state_and_ui.txt", "r") as f:
+            return f.read()
+    except Exception as e:
+        logging.warning(f"Chyba
