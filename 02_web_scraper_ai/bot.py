@@ -155,11 +155,18 @@ def proved_git_commit(commit_zprava, pockat_hodin=0):
         print(f"⚠️ Git neměl co poslat nebo došlo k chybě: {e}")
 
 def main():
-    if hasattr(sys.stdout, 'reconfigure'):
-        sys.stdout.reconfigure(encoding='utf-8')
-    else:
-        import io
-        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    # Ensure UTF-8 output on Windows (avoids Mojibake)
+    try:
+        if hasattr(sys.stdout, 'reconfigure'):
+            # Use getattr to satisfy static type checkers (like Pylance/Pyright)
+            # which think sys.stdout is always 'TextIO' without 'reconfigure'
+            getattr(sys.stdout, 'reconfigure')(encoding='utf-8')
+        elif hasattr(sys.stdout, 'buffer'):
+            import io
+            sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    except (AttributeError, TypeError):
+        pass # Fallback in case of strange stdout wrappers
+
 
     print(f"--- 🤖 Erudios Auto-Bot (Verze: GROQ) spuštěn (Cíl: {STUDENT_JMENO}) ---")
     
@@ -233,8 +240,8 @@ def main():
                 # Uložíme jako "edited_main.py" vedle originálu
                 cesta = os.path.join(REPO_ROOT, adresar, f"edited_{soubor}")
             else:
-                # Pokud nevíme kam, uložíme do kořene
-                cesta = os.path.join(REPO_ROOT, "novy_kod_z_hodnoceni.py")
+                # Pokud nevíme kam, uložíme do složky s botem (02_web_scraper_ai)
+                cesta = os.path.join(SCRIPT_DIR, "novy_kod_z_hodnoceni.py")
                 
             try:
                 os.makedirs(os.path.dirname(cesta), exist_ok=True)
