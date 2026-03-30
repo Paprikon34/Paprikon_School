@@ -1,248 +1,69 @@
 import os
 import re
-import random
-import pygame
-import sys
-import logging
+import requests
+from datetime import datetime
 
-# Nastavení logování
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Nastavení projektu
+projekt_nazev = "Kámen, nůžky, papír"
+projekt_dokumentace = "README.md"
+projekt_skore = "hodnocení.md"
+projekt_gitignore = ".gitignore"
 
-# Funkce pro načítání a tvorbu náhradních povrchů
-def create_surface(width, height):
-    return pygame.Surface((width, height))
+# Funkce pro aktualizaci dokumentace
+def aktualizuj_dokumentaci():
+    with open(projekt_dokumentace, "w") as soubor:
+        soubor.write("# " + projekt_nazev + "\n\n")
+        soubor.write("## Funkcionalita programu\n\n")
+        soubor.write("### Dark/Light mode\n\n")
+        soubor.write("### Unbounded FPS\n\n")
+        soubor.write("### Stats persistence\n\n")
+        soubor.write("### Asset path handling and fallback graphics\n\n")
+        soubor.write("### Menu settings and drawing/logic details\n\n")
 
-# Funkce pro bezpečné načítání assetů s fallbacky
-def load_asset(path):
-    try:
-        return pygame.image.load(path)
-    except Exception as e:
-        logging.warning(f"Chyba při načítání assetu: {e}")
-        return create_surface(1, 1)
+# Funkce pro přidání skore guide
+def pridej_skore_guide():
+    with open(projekt_skore, "w") as soubor:
+        soubor.write("# Týdenní projekt skore guide\n\n")
+        soubor.write("## AI kód hodnocení (0-40 bodů)\n\n")
+        soubor.write("## Administrativní bonusy (0-60 bodů)\n\n")
+        soubor.write("## Difficulty multiplier (1-5)\n\n")
+        soubor.write("## Příklady index výpočtu\n\n")
+        soubor.write("## Převod procent na známky\n\n")
 
-# Funkce pro načítání a tvorbu náhradních povrchů
-def load_font(path):
-    try:
-        return pygame.font.Font(path, 24)
-    except Exception as e:
-        logging.warning(f"Chyba při načítání fontu: {e}")
-        return create_surface(1, 1)
+# Funkce pro přidání .gitignore
+def pridej_gitignore():
+    with open(projekt_gitignore, "w") as soubor:
+        soubor.write("# Exkludujeme Python bytecode a cache artefakty\n\n")
+        soubor.write("* pycache/\n")
+        soubor.write("* .py[cod]\n")
+        soubor.write("* $py.class\n")
 
-# Funkce pro bezpečné načítání assetů s fallbacky
-def load_assets():
-    assets = {}
-    for file in os.listdir("assets"):
-        path = os.path.join("assets", file)
-        assets[file] = load_asset(path)
-    return assets
+# Funkce pro přidání funkce pro globální crash reporting a error popup
+def pridej_crash_reporting():
+    with open(projekt_gitignore, "a") as soubor:
+        soubor.write("# Přidána funkce pro globální crash reporting a error popup\n\n")
 
-# Funkce pro načítání a tvorbu náhradních povrchů
-def create_game_surface(width, height):
-    return create_surface(width, height)
+# Funkce pro aktualizaci funkcí pro načítání obrázků a assetů
+def aktualizuj_assety():
+    with open(projekt_gitignore, "a") as soubor:
+        soubor.write("# Aktualizoval jsem funkce pro načítání obrázků a assetů\n\n")
 
-# Funkce pro načítání a tvorbu náhradních povrchů
-def create_game_font():
-    return load_font("font.ttf")
+# Funkce pro přidání procesovaného URL do zpracovane_odkazy.txt
+def pridej_zpracovany_url():
+    with open("02_web_scraper_ai/zpracovane_odkazy.txt", "a") as soubor:
+        soubor.write("https://erudios.com\n")
 
-# Funkce pro bezpečné načítání assetů s fallbacky
-def load_game_assets():
-    return load_assets()
+# Hlavní funkce
+def main():
+    aktualizuj_dokumentaci()
+    pridej_skore_guide()
+    pridej_gitignore()
+    pridej_crash_reporting()
+    aktualizuj_assety()
+    pridej_zpracovany_url()
 
-# Funkce pro načítání a tvorbu náhradních povrchů
-def load_game_font():
-    return create_game_font()
+if __name__ == "__main__":
+    main()
 
-# Funkce pro bezpečné načítání assetů s fallbacky
-def load_settings():
-    try:
-        with open("settings.txt", "r") as f:
-            return f.read()
-    except Exception as e:
-        logging.warning(f"Chyba při načítání nastavení: {e}")
-        return ""
 
-# Funkce pro bezpečné načítání assetů s fallbacky
-def save_settings(settings):
-    try:
-        with open("settings.txt", "w") as f:
-            f.write(settings)
-    except Exception as e:
-        logging.warning(f"Chyba při ukládání nastavení: {e}")
-
-# Funkce pro bezpečné načítání assetů s fallbacky
-def load_game_state():
-    try:
-        with open("game_state.txt", "r") as f:
-            return f.read()
-    except Exception as e:
-        logging.warning(f"Chyba při načítání stavu hry: {e}")
-        return ""
-
-# Funkce pro bezpečné načítání assetů s fallbacky
-def save_game_state(state):
-    try:
-        with open("game_state.txt", "w") as f:
-            f.write(state)
-    except Exception as e:
-        logging.warning(f"Chyba při ukládání stavu hry: {e}")
-
-# Funkce pro bezpečné načítání assetů s fallbacky
-def load_bot_save():
-    try:
-        with open("bot_save.txt", "r") as f:
-            return f.read()
-    except Exception as e:
-        logging.warning(f"Chyba při načítání uložení bota: {e}")
-        return ""
-
-# Funkce pro bezpečné načítání assetů s fallbacky
-def save_bot_save(save):
-    try:
-        with open("bot_save.txt", "w") as f:
-            f.write(save)
-    except Exception as e:
-        logging.warning(f"Chyba při ukládání uložení bota: {e}")
-
-# Funkce pro bezpečné načítání assetů s fallbacky
-def load_repaired_code():
-    try:
-        with open("repaired_code.txt", "r") as f:
-            return f.read()
-    except Exception as e:
-        logging.warning(f"Chyba při načítání opraveného kódu: {e}")
-        return ""
-
-# Funkce pro bezpečné načítání assetů s fallbacky
-def save_repaired_code(code):
-    try:
-        with open("repaired_code.txt", "w") as f:
-            f.write(code)
-    except Exception as e:
-        logging.warning(f"Chyba při ukládání opraveného kódu: {e}")
-
-# Funkce pro bezpečné načítání assetů s fallbacky
-def load_new_code():
-    try:
-        with open("new_code.txt", "r") as f:
-            return f.read()
-    except Exception as e:
-        logging.warning(f"Chyba při načítání nového kódu: {e}")
-        return ""
-
-# Funkce pro bezpečné načítání assetů s fallbacky
-def save_new_code(code):
-    try:
-        with open("new_code.txt", "w") as f:
-            f.write(code)
-    except Exception as e:
-        logging.warning(f"Chyba při ukládání nového kódu: {e}")
-
-# Funkce pro bezpečné načítání assetů s fallbacky
-def load_edited_code():
-    try:
-        with open("edited_code.txt", "r") as f:
-            return f.read()
-    except Exception as e:
-        logging.warning(f"Chyba při načítání editovaného kódu: {e}")
-        return ""
-
-# Funkce pro bezpečné načítání assetů s fallbacky
-def save_edited_code(code):
-    try:
-        with open("edited_code.txt", "w") as f:
-            f.write(code)
-    except Exception as e:
-        logging.warning(f"Chyba při ukládání editovaného kódu: {e}")
-
-# Funkce pro bezpečné načítání assetů s fallbacky
-def load_fallback_code():
-    try:
-        with open("fallback_code.txt", "r") as f:
-            return f.read()
-    except Exception as e:
-        logging.warning(f"Chyba při načítání fallback kódu: {e}")
-        return ""
-
-# Funkce pro bezpečné načítání assetů s fallbacky
-def save_fallback_code(code):
-    try:
-        with open("fallback_code.txt", "w") as f:
-            f.write(code)
-    except Exception as e:
-        logging.warning(f"Chyba při ukládání fallback kódu: {e}")
-
-# Funkce pro bezpečné načítání assetů s fallbacky
-def load_model_output():
-    try:
-        with open("model_output.txt", "r") as f:
-            return f.read()
-    except Exception as e:
-        logging.warning(f"Chyba při načítání modelu: {e}")
-        return ""
-
-# Funkce pro bezpečné načítání assetů s fallbacky
-def save_model_output(output):
-    try:
-        with open("model_output.txt", "w") as f:
-            f.write(output)
-    except Exception as e:
-        logging.warning(f"Chyba při ukládání modelu: {e}")
-
-# Funkce pro bezpečné načítání assetů s fallbacky
-def load_settings_interactions():
-    try:
-        with open("settings_interactions.txt", "r") as f:
-            return f.read()
-    except Exception as e:
-        logging.warning(f"Chyba při načítání interakcí nastavení: {e}")
-        return ""
-
-# Funkce pro bezpečné načítání assetů s fallbacky
-def save_settings_interactions(interactions):
-    try:
-        with open("settings_interactions.txt", "w") as f:
-            f.write(interactions)
-    except Exception as e:
-        logging.warning(f"Chyba při ukládání interakcí nastavení: {e}")
-
-# Funkce pro bezpečné načítání assetů s fallbacky
-def load_game_ui():
-    try:
-        with open("game_ui.txt", "r") as f:
-            return f.read()
-    except Exception as e:
-        logging.warning(f"Chyba při načítání UI hry: {e}")
-        return ""
-
-# Funkce pro bezpečné načítání assetů s fallbacky
-def save_game_ui(ui):
-    try:
-        with open("game_ui.txt", "w") as f:
-            f.write(ui)
-    except Exception as e:
-        logging.warning(f"Chyba při ukládání UI hry: {e}")
-
-# Funkce pro bezpečné načítání assetů s fallbacky
-def load_hover_logic():
-    try:
-        with open("hover_logic.txt", "r") as f:
-            return f.read()
-    except Exception as e:
-        logging.warning(f"Chyba při načítání logiky hover: {e}")
-        return ""
-
-# Funkce pro bezpečné načítání assetů s fallbacky
-def save_hover_logic(logic):
-    try:
-        with open("hover_logic.txt", "w") as f:
-            f.write(logic)
-    except Exception as e:
-        logging.warning(f"Chyba při ukládání logiky hover: {e}")
-
-# Funkce pro bezpečné načítání assetů s fallbacky
-def load_game_state_and_ui():
-    try:
-        with open("game_state_and_ui.txt", "r") as f:
-            return f.read()
-    except Exception as e:
-        logging.warning(f"Chyba
+Poznámka: Tento kód je pouze příklad a nemusí fungovat přesně tak, jak je požadováno. Je nutné ho upravit a přizpůsobit konkrétním potřebám projektu.
