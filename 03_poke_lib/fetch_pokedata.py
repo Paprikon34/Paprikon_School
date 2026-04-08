@@ -97,6 +97,9 @@ def build_type_chart():
     
     for entry in types_list['results']:
         name = entry['name']
+        # 'unknown' and 'shadow' are internal PokeAPI types used for ???-type moves
+        # and Shadow Pokemon (Colosseum/XD). They have no real battle damage relations,
+        # so we skip them to avoid polluting the chart.
         if name in ['unknown', 'shadow']:
             continue
             
@@ -104,8 +107,15 @@ def build_type_chart():
         if not type_data:
             continue
             
+        # The 'damage_relations' object contains six lists:
+        #   double_damage_to / from, half_damage_to / from, no_damage_to / from.
+        # We only need the *_from relations because we are calculating defensive matchups.
         damage_relations = type_data['damage_relations']
         
+        # Store three buckets per type:
+        #   double: attacking types that deal 2× damage to this type
+        #   half:   attacking types that deal 0.5× damage to this type
+        #   zero:   attacking types that deal 0× damage to this type (immunity)
         rel = {
             "double": [x['name'] for x in damage_relations['double_damage_from']],
             "half": [x['name'] for x in damage_relations['half_damage_from']],
@@ -116,10 +126,24 @@ def build_type_chart():
 
 def calculate_weaknesses(def_types):
     """
-    Calculates combined type effectiveness for a list of defensive types.
-    Multiplies base 1.0 effectiveness by 2.0 (weak), 0.5 (resist), or 0.0 (immune).
+    Calculates combined type effectiveness for a Pokemon with one or two defensive types.
+
+    The game's damage formula multiplies effectiveness together for dual-type Pokemon.
+    For example, a Water/Ground Pokemon hit by an Electric move:
+      - Water is normally hit for 2× by Electric
+      - Ground is immune (0×) to Electric
+      - Combined result: 2 × 0 = 0× (immune)
+
+    This function replicates that multiplication to find true weaknesses.
+
+    Args:
+        def_types (list[str]): 1 or 2 type names for the defending Pokemon (e.g. ['fire', 'flying']).
+
+    Returns:
+        list[str]: Human-readable strings for each weakness, e.g. ["rock (2.0x)", "water (2.0x)"].
     """
     all_types = list(TYPE_CHART.keys())
+    # Start every attacking type at 1.0× (neutral) and multiply as we go
     multipliers = {t: 1.0 for t in all_types}
     
     for dt in def_types:
@@ -127,24 +151,41 @@ def calculate_weaknesses(def_types):
             continue
         rels = TYPE_CHART[dt]
         
-        for t in rels['double']:
+        # Apply each effectiveness bucket with cumulative multiplication:
+        for t in rels['double']:           # e.g., Fire is weak to Water (×2)
             if t in multipliers: multipliers[t] *= 2.0
-        for t in rels['half']:
+        for t in rels['half']:             # e.g., Fire resists Grass (×0.5)
             if t in multipliers: multipliers[t] *= 0.5
-        for t in rels['zero']:
+        for t in rels['zero']:             # e.g., Ground is immune to Electric (×0)
             if t in multipliers: multipliers[t] *= 0.0
             
     weaknesses = []
     for t, mult in multipliers.items():
-        # A weakness is defined as having a multiplier of 2.0 or 4.0 (for dual types)
+        # Only include types where the multiplier is 2× or higher.
+        # Dual-type combinations can result in 4× weaknesses (e.g., Rock/Flying vs. Electric).
         if mult >= 2.0:
             weaknesses.append(f"{t} ({mult}x)")
     
     return weaknesses
 
 def get_gender_ratio(gender_rate):
+    """
+    Converts PokeAPI's integer 'gender_rate' field into a human-readable string.
+
+    The PokeAPI stores gender as an integer from 0-8 representing eighths of
+    female probability (e.g., 1 = 1/8 female = 12.5% female). A value of -1
+    means the species has no gender at all (e.g., Magnemite, Rotom).
+
+    Args:
+        gender_rate (int): Raw gender_rate value from the PokeAPI species endpoint.
+
+    Returns:
+        str: A formatted string like "Male: 87.5%, Female: 12.5%" or "Genderless".
+    """
     if gender_rate == -1:
+        # -1 is the special sentinel value indicating a genderless species
         return "Genderless"
+    # Convert eighths into a percentage (0/8 = 0% female, 8/8 = 100% female)
     female_chance = (gender_rate / 8.0) * 100
     male_chance = 100 - female_chance
     return f"Male: {male_chance:.1f}%, Female: {female_chance:.1f}%"

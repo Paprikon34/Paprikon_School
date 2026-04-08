@@ -345,12 +345,28 @@ class PokedexWindow(QMainWindow):
             self.pokemon_data = {}
 
     def populate_list(self):
+        """
+        Refreshes the left-hand list widget from 'self.filtered_keys'.
+
+        Each item is displayed as "#ID Title Case Name" (e.g. "#6 Charizard").
+        The ID is included so jump_to_pokemon can find the item by an exact
+        string match without needing a separate lookup table.
+        """
         self.list_widget.clear()
         for name in self.filtered_keys:
+            # Convert API names ("charizard-mega-x") to display names ("Charizard Mega X")
             display_name = name.replace("-", " ").title()
             self.list_widget.addItem(f"#{self.pokemon_data[name].get('id', '000')} {display_name}")
 
     def toggle_type_filter(self, type_name, checked):
+        """
+        Adds or removes a type from the active type-filter set and re-runs filtering.
+
+        The filter is additive (AND logic): selecting both 'fire' and 'flying' will
+        only show Pokemon that have BOTH types simultaneously (e.g. Charizard).
+        'discard' is used instead of 'remove' so no KeyError is raised if the type
+        was somehow not in the set.
+        """
         if checked:
             self.selected_types.add(type_name)
         else:
@@ -409,9 +425,16 @@ class PokedexWindow(QMainWindow):
         self.populate_list()
 
     def on_selection_change(self, row):
+        """
+        Called by Qt whenever the user clicks a different item in the list.
+
+        Guards against out-of-range indices that can occur when the list is
+        being repopulated (Qt may fire this signal with row=-1 during a clear()).
+        """
         if row < 0 or row >= len(self.filtered_keys):
             return
         
+        # Cache the currently selected name and its data dict for use by other methods
         self.current_name = self.filtered_keys[row]
         self.current_data = self.pokemon_data[self.current_name]
         self.update_details()
@@ -459,18 +482,24 @@ class PokedexWindow(QMainWindow):
         # Physical Properties & New Data
         self.add_grid_item("Height", f"{data.get('height', '?')} m", 0, 0)
         self.add_grid_item("Weight", f"{data.get('weight', '?')} kg", 0, 1)
+        # Capture rate ranges from 3 (hardest, e.g. Mewtwo) to 255 (easiest, e.g. Caterpie)
         self.add_grid_item("Catch Rate", f"{data.get('capture_rate', '?')}", 0, 2)
         
-        # Hatch steps calculation
+        # Hatch steps calculation:
+        # The PokeAPI stores an egg cycle count ('hatch_counter'). In the games,
+        # each cycle is 255 steps, so the minimum steps to hatch = hatch_counter × 255.
         h_counter = data.get('hatch_counter') 
         hatch_steps = f"{h_counter * 255} steps" if h_counter is not None else "???"
         
         self.add_grid_item("Hatch Steps", hatch_steps, 1, 0)
+        # Base happiness (0-255). High values mean the Pokemon levels up faster with friendship.
         self.add_grid_item("Base Happiness", f"{data.get('base_happiness', '?')}", 1, 1)
         self.add_grid_item("Base Exp", f"{data.get('base_experience', '?')}", 1, 2)
 
+        # Egg groups span the full width (colspan=3) since they can have long names
         self.add_grid_item("Egg Groups", ", ".join(data.get('egg_groups', [])).title(), 2, 0, 1, 3)
         self.add_grid_item("Gender", data.get('gender', 'Unknown'), 3, 0, 1, 3)
+        # Hidden abilities are included in the list; their (hidden) tag is not shown here
         self.add_grid_item("Abilities", ", ".join([a['name'].title() for a in data.get('abilities', [])]), 4, 0, 1, 3)
         
         # Stats Tab
@@ -659,12 +688,23 @@ class PokedexWindow(QMainWindow):
         self.entries_layout.addStretch()
 
     def update_image(self, shiny):
+        """
+        Fetches and displays the sprite for the currently selected Pokemon.
+
+        Uses official artwork from PokeAPI when available. If the current variety
+        (e.g. a Mega form) doesn't have its own shiny sprite, falls back to the
+        base species sprite from the same Pokedex ID.
+
+        Args:
+            shiny (bool): True to show the shiny version, False for the normal version.
+        """
+        # Choose which sprite URL to use depending on the shiny button state
         url = self.current_data.get('shiny_sprite' if shiny else 'sprite')
         
-        # Fallback to base species sprite if variety lacks its own
+        # Fallback: some alternate forms (e.g., regional variants fetched only partially)
+        # don't have their own artwork URL. In that case, look for the canonical base
+        # form (no hyphen in name) that shares the same numeric Pokedex ID.
         if not url:
-            base_name = self.current_data.get('evolution', [self.current_name])[0]
-            # Try to find a 'default' form of the same ID (species base)
             for k, v in self.pokemon_data.items():
                 if v.get('id') == self.current_data.get('id') and '-' not in k:
                     url = v.get('shiny_sprite' if shiny else 'sprite')
@@ -673,6 +713,7 @@ class PokedexWindow(QMainWindow):
         self.image_label.clear()
         self.image_label.setText("Loading...")
         if url:
+            # ImageLoader runs in a background QThread so the GUI stays responsive
             self.loader = ImageLoader(url)
             self.loader.loaded.connect(self.set_image)
             self.loader.start()
@@ -680,33 +721,82 @@ class PokedexWindow(QMainWindow):
             self.image_label.setText("No Image")
 
     def jump_to_pokemon(self, name):
-        # Format must match populate_list: f"#{id} {Title Case Name}"
+        """
+        Programmatically selects a Pokemon in the list by its internal API name.
+
+        Used by the Evolutions and Forms tabs so clicking a Pokemon's button
+        navigates directly to their entry in the list.
+
+        Strategy:
+          1. Build the exact display string ("#6 Charizard") to use MatchExactly,
+             which is O(n) but avoids false positives from partial name matches.
+          2. Fall back to a MatchContains search if the ID is unavailable.
+
+        Args:
+            name (str): Internal API name of the target Pokemon (e.g. "charizard-mega-x").
+        """
+        # Reconstruct the list item text exactly as populate_list() built it
         pid = self.pokemon_data.get(name, {}).get('id', '000')
         display_name = name.replace("-", " ").title()
         search_str = f"#{pid} {display_name}"
         
+        # Exact match first — this handles all normal cases
         items = self.list_widget.findItems(search_str, Qt.MatchFlag.MatchExactly)
         if items:
             self.list_widget.setCurrentItem(items[0])
         else:
-            # Fallback for name only if ID is missing
+            # Partial match fallback: handles edge cases where the ID might differ
+            # between what was stored and what was looked up (rare, but possible
+            # for Pokemon with multiple Pokedex IDs like Deoxys forms).
             items = self.list_widget.findItems(display_name, Qt.MatchFlag.MatchContains)
             if items:
                 self.list_widget.setCurrentItem(items[0])
 
     def get_stat_color(self, value):
-        if value < 60: return "#de4e3e" # Red
-        if value < 90: return "#f7d02c" # Yellow
-        return "#7ac74c" # Green
+        """
+        Returns a hex color string based on a stat value for the stat progress bars.
+
+        Thresholds are chosen to roughly match the typical distribution of base stats:
+          - Below 60:  Below average / weak  → Red
+          - 60 to 89:  Average / decent       → Yellow
+          - 90+:       Above average / strong → Green
+
+        Args:
+            value (int): A base stat value (0-255).
+
+        Returns:
+            str: A CSS hex color string.
+        """
+        if value < 60: return "#de4e3e"  # Red   — poor stat (e.g., Shedinja's HP = 1)
+        if value < 90: return "#f7d02c"  # Yellow — average stat
+        return "#7ac74c"                 # Green  — strong stat (e.g., Blissey's HP = 255)
 
     def add_grid_item(self, title, unique_val, row, col, rowspan=1, colspan=1):
+        """
+        Creates a labelled value card and inserts it into the info grid.
+
+        Each card is a small QWidget with two stacked QLabels:
+          - A small, muted 'title' label (e.g. "HEIGHT")
+          - A larger, bright 'value' label (e.g. "1.7 m")
+
+        Args:
+            title (str):       The property name to display as a header.
+            unique_val (str):  The value to display beneath the title.
+            row (int):         Grid row index (0-based).
+            col (int):         Grid column index (0-based).
+            rowspan (int):     How many rows this card spans (default 1).
+            colspan (int):     How many columns this card spans (default 1).
+                               Use colspan=3 to make an item span the full grid width.
+        """
         container = QWidget()
         v = QVBoxLayout(container)
-        v.setContentsMargins(0,0,0,0)
+        v.setContentsMargins(0, 0, 0, 0)
         
+        # Small, subdued label acts as a column header
         t = QLabel(title)
         t.setStyleSheet("color: #777; font-size: 12px; font-weight: bold; text-transform: uppercase;")
         
+        # Larger label for the actual value; wordWrap handles long strings like ability lists
         val = QLabel(str(unique_val))
         val.setStyleSheet("color: white; font-size: 16px;")
         val.setWordWrap(True)
@@ -717,7 +807,18 @@ class PokedexWindow(QMainWindow):
         self.grid_layout.addWidget(container, row, col, rowspan, colspan)
 
     def set_image(self, qimage):
+        """
+        Slot called by ImageLoader once the main detail image has been downloaded.
+
+        Converts the raw QImage to a QPixmap (required for display in QLabel),
+        then scales it to fit the 300×300 image box using smooth (bicubic) scaling
+        while preserving the original aspect ratio.
+
+        Args:
+            qimage (QImage): The downloaded image data emitted from ImageLoader.
+        """
         pixmap = QPixmap.fromImage(qimage)
+        # SmoothTransformation uses bicubic interpolation for high-quality downscaling
         scaled = pixmap.scaled(250, 250, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
         self.image_label.setPixmap(scaled)
 
