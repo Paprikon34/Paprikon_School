@@ -1,87 +1,87 @@
 import random
 import sys
 
-# Zvětšíme limit rekurze (pro jistotu, kdyby se vygenerovalo obří bludiště)
+# Increase recursion limit (just in case a huge maze is generated)
 sys.setrecursionlimit(5000)
 
-# Velikost bludiště (musí to být lichá čísla, např. 31 a 15)
-SIRKA = 31
-VYSKA = 15
+# Maze size (must be odd numbers, e.g., 31 and 15)
+WIDTH = 31
+HEIGHT = 15
 
-# Definujeme si, jak budou vypadat zdi a cesty (použijeme 2 znaky pro každé, ať vznikne hezký čtverec)
-ZED = "██"
-CESTA = "  "
+# Define how walls and paths will look (we use 2 characters for each, to make a nice square)
+WALL = "██"
+PATH = "  "
 
-def vytvor_prazdne_bludiste():
+def create_empty_maze():
     """ 
-    Vytvoří mapu, která je úplně celá zasypaná hlínou (všude jsou zdi).
-    Vrací 2D pole zdí.
+    Creates a map that is completely filled with soil (walls everywhere).
+    Returns a 2D list of walls.
     """
-    mapa = []
-    for y in range(VYSKA):
-        radek = []
-        for x in range(SIRKA):
-            radek.append(ZED)
-        mapa.append(radek)
-    return mapa
+    maze_map = []
+    for y in range(HEIGHT):
+        row = []
+        for x in range(WIDTH):
+            row.append(WALL)
+        maze_map.append(row)
+    return maze_map
 
-def vykopat_tunel(x, y, mapa):
+def dig_tunnel(x, y, maze_map):
     """
-    Toto je hlavní FUNKCE (krtek). Vykope díru, náhodně se rozhlédne a jde dál.
+    This is the main FUNCTION (the mole). It digs a hole, randomly looks around and goes further.
     """
-    # Označíme současné místo jako vykopanou cestu (prázdno)
-    mapa[y][x] = CESTA
+    # Mark the current spot as a dug path (empty)
+    maze_map[y][x] = PATH
     
-    # 4 směry, kam může krtek kopat (Nahoru, Dolů, Doleva, Doprava)
-    # Skáčeme vždy o 2 políčka! To aby nám mezi cestami zůstala vždy jedna tenká zeď.
-    # Uspořádání je: (kolik_skok_na_X, kolik_skok_na_Y)
-    smery = [
-        (0, -2), # Nahoru (y se zmenší o 2)
-        (0, 2),  # Dolů (y se zvětší o 2)
-        (-2, 0), # Doleva (x se zmenší o 2)
-        (2, 0)   # Doprava (x se zvětší o 2)
+    # 4 directions where the mole can dig (Up, Down, Left, Right)
+    # We always jump by 2 cells! This is to always leave a thin wall between paths.
+    # The layout is: (jump_amount_on_X, jump_amount_on_Y)
+    directions = [
+        (0, -2), # Up (y decreases by 2)
+        (0, 2),  # Down (y increases by 2)
+        (-2, 0), # Left (x decreases by 2)
+        (2, 0)   # Right (x increases by 2)
     ]
     
-    # Zamícháme směry! Proto je každé bludiště jiné - krtek má pokaždé jiný plán.
-    random.shuffle(smery)
+    # Shuffle the directions! That's why every maze is different - the mole has a different plan every time.
+    random.shuffle(directions)
     
-    # Krtek to zkouší postupně do všech 4 směrů v náhodném pořadí
-    for skok_x, skok_y in smery:
-        dalsi_x = x + skok_x
-        dalsi_y = y + skok_y
+    # The mole tries all 4 directions sequentially in random order
+    for step_x, step_y in directions:
+        next_x = x + step_x
+        next_y = y + step_y
         
-        # Zkontrolujeme dvě důležité věci:
-        # 1. Nevyjeli jsme z mapy pryč?
-        # 2. Je na tom novém místě ještě hlína (zeď)? (Pokud je tam už cesta, nekopeme tam)
-        if 0 < dalsi_x < SIRKA - 1 and 0 < dalsi_y < VYSKA - 1:
-            if mapa[dalsi_y][dalsi_x] == ZED:
-                # Našli jsme místo! 
-                # Prokopneme i tu zeď, kterou jsme "přeskočili", čímž se obě místa spojí
-                mapa[y + skok_y // 2][x + skok_x // 2] = CESTA
+        # We check two important things:
+        # 1. Did we go off the map?
+        # 2. Is there still soil (a wall) in the new place? (If there's already a path, we don't dig there)
+        if 0 < next_x < WIDTH - 1 and 0 < next_y < HEIGHT - 1:
+            if maze_map[next_y][next_x] == WALL:
+                # We found a spot! 
+                # We also smash through the wall we "jumped over", connecting both places
+                maze_map[y + step_y // 2][x + step_x // 2] = PATH
                 
-                # REKURZE: (Nejsložitější krok - obtížnost 5)
-                # Voláme znovu stejnou funkci, aby pokračovala z NOVÉHO místa. 
-                # Když krtek v nové chodbě skončí a nemá kam jít (slepá ulička), 
-                # program se o krok vrátí z rekurze zpět sem a krtek zkusí další směr.
-                vykopat_tunel(dalsi_x, dalsi_y, mapa)
+                # RECURSION: (The most complex step - difficulty 5)
+                # We call the same function again to continue from the NEW spot. 
+                # When the mole finishes in the new corridor and has nowhere to go (dead end), 
+                # the program steps back from the recursion here and the mole tries the next direction.
+                dig_tunnel(next_x, next_y, maze_map)
 
-# --- HLAVNÍ ČÁST PROGRAMU ---
+# --- MAIN PROGRAM SECTION ---
 if __name__ == "__main__":
-    print("Spouštím program pro generování bludiště (Algoritmus: Rekurzivní Krtek)...\n")
+    print("Running the maze generator program (Algorithm: Recursive Backtracker/Mole)...\n")
 
-    # 1. Připravíme hlínu (zdi)
-    nase_bludiste = vytvor_prazdne_bludiste()
+    # 1. Prepare the soil (walls)
+    our_maze = create_empty_maze()
 
-    # 2. Vypustíme krtka z levého horního rohu (souřadnice 1, 1 uvnitř hlíny)
-    vykopat_tunel(1, 1, nase_bludiste)
+    # 2. Release the mole from the top left corner (coordinates 1, 1 inside the soil)
+    dig_tunnel(1, 1, our_maze)
 
-    # 3. Z krtkovy nory vyrobíme Vstup a Výstup na krajích mapy, aby to bylo hratelné bludiště
-    nase_bludiste[1][0] = CESTA # Vstup je nalevo
-    nase_bludiste[VYSKA-2][SIRKA-1] = CESTA # Výstup je napravo dole
+    # 3. From the mole's burrow, we make an Entrance and an Exit at the edges of the map to make it a playable maze
+    our_maze[1][0] = PATH # Entrance is on the left
+    our_maze[HEIGHT-2][WIDTH-1] = PATH # Exit is on the bottom right
 
-    # 4. Vytiskneme hezky na obrazovku řádek po řádku
-    for radek in nase_bludiste:
-        # Převedeme pole značek do jednoho stringu pro celý řádek
-        print("".join(radek))
+    # 4. Print it nicely on the screen row by row
+    for row in our_maze:
+        # Convert the array of characters into a single string for the whole row
+        print("".join(row))
 
-    print("\nÚspěšně vygenerováno! Zvládneš ho v hlavě vyřešit?")
+    print("\nSuccessfully generated! Can you solve it in your head?")
