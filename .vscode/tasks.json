@@ -8,6 +8,7 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
+                "-std=c++17",
                 "${file}",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
@@ -23,6 +24,27 @@
                 "isDefault": true
             },
             "detail": "compiler: C:\\msys64\\ucrt64\\bin\\g++.exe"
+        },
+        {
+            "type": "cppbuild",
+            "label": "C/C++: g++.exe build Project 4",
+            "command": "C:\\msys64\\ucrt64\\bin\\g++.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "-std=c++17",
+                "${workspaceFolder}\\04_banking_simulator\\acout_simulator.cpp",
+                "-o",
+                "${workspaceFolder}\\04_banking_simulator\\acout_simulator.exe"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}\\04_banking_simulator"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build",
+            "detail": "Builds Project 4 (04_banking_simulator)"
         }
     ]
 }
