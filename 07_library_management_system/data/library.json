@@ -1,0 +1,27 @@
+{
+  "books": [
+    {
+      "id": 1,
+      "title": "Harry Potter and the Sorcerer's Stone",
+      "author": "J.K. Rowling",
+      "genre": "Fantasy",
+      "is_available": true,
+      "borrower": "None"
+    },
+    {
+      "id": 2,
+      "title": "1984",
+      "author": "George Orwell",
+      "genre": "Dystopian",
+      "is_available": false,
+      "borrower": "patrik_dev"
+    }
+  ],
+  "users": [
+    {
+      "id": 101,
+      "name": "patrik_dev",
+      "borrowed_count": 1
+    }
+  ]
+}
