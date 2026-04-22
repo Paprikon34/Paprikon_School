@@ -1,24 +1,46 @@
 # 🏰 Projekt 07: Library Management System
 
 ## 📋 Popis projektu
-Pokročilý systém pro správu knihovny postavený na principech **objektově orientovaného programování (OOP)** v jazyce C++. Cílem projektu je vytvořit robustní aplikaci pro evidenci knih, čtenářů a výpůjček.
+Pokročilý systém pro správu knihovny postavený na principech **objektově orientovaného programování (OOP)** v jazyce C++. Cílem projektu je vytvořit robustní aplikaci pro evidenci knih, čtenářů a výpůjček s podporou persistence dat ve formátu JSON.
 
-## 🛠 Technické cíle
-- **OOP Architektura**: Využití tříd (`Book`, `User`, `Library`).
-- **Správa dat**: Ukládání a načítání dat z externího souboru (JSON nebo CSV).
-- **Relace**: Propojení knih s konkrétními uživateli.
-- **Logika**: Kontrola dostupnosti knih, termíny vrácení a vyhledávání.
+## 🛠 Technické pilíře
+- **OOP Architektura**: Dekompozice systému na třídy `Book`, `User` a `LibraryManager`.
+- **JSON Modernizace**: Využití knihovny `nlohmann/json` pro špičkovou práci s daty.
+- **Robustnost**: Statické i dynamické metody pro validaci a transformaci dat.
+- **Relace**: Provázání knih s uživateli pomocí unikátních identifikátorů.
 
-## 📂 Plánovaná struktura
-- `main.cpp`: Vstupní bod programu.
-- `Library.h / .cpp`: Jádro logiky systému.
-- `Book.h / .cpp`: Definice objektu knihy.
-- `User.h / .cpp`: Správa uživatelských profilů.
-- `data/`: Složka pro datové soubory.
+## 📂 Aktuální struktura
+- `Book.h / .cpp`: Kompletní implementace objektu knihy včetně serializace.
+- `json.hpp`: Header-only knihovna pro JSON operace.
+- `data/library.json`: Hlavní databáze knih a uživatelů.
+- `popular_manga_and_novels.json`: Rozšířený datový dataset pro testování (200+ položek).
 
 ## 📊 Stav vývoje
-- [ ] Návrh tříd a relací
-- [ ] Implementace základní logiky (přidávání/odebírání knih)
-- [ ] Persistence dat (ukládání do souboru)
-- [ ] Uživatelské menu a vyhledávání
-- [ ] Systém výpůjček
+- [x] **Návrh tříd a relací**: Definována struktura Book a User v JSON.
+- [x] **Základní komponenty**: Implementována třída `Book` s kompletní logikou.
+- [x] **Persistence dat**: Plná podpora JSON (Save/Load).
+- [/] **Library Manager**: Jádro systému (ve vývoji).
+- [ ] **Uživatelské rozhraní**: Interaktivní konzolové menu.
+- [ ] **Systém výpůjček**: Pokročilá logika pro správu čtenářů a termínů.
+
+## 💾 Datový model (Snippet)
+```json
+{
+  "books": [
+    {
+      "id": 1,
+      "title": "Harry Potter",
+      "author": "J.K. Rowling",
+      "is_available": true,
+      "borrower": "None"
+    }
+  ],
+  "users": [
+    {
+      "id": 101,
+      "name": "patrik_dev",
+      "borrowed_count": 1
+    }
+  ]
+}
+```
