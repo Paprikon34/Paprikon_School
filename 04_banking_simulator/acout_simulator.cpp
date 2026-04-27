@@ -24,8 +24,7 @@ int main() {
     //getting user name
     cout << "Welcome to Account Simulator!" << endl;
     cout << "Please enter your name: ";
-    std::getline(cin >> std::ws, user_name); // std::ws to ignore leading whitespace
-
+    cin >> user_name;
     cout << "Hello, " << user_name << "! Your starting balance is $" << balance << endl;
 
     //initial deposit
