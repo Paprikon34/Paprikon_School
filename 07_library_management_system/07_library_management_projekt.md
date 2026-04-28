@@ -23,6 +23,11 @@ Pokročilý systém pro správu knihovny postavený na principech **objektově o
 - [ ] **Uživatelské rozhraní**: Interaktivní konzolové menu.
 - [ ] **Systém výpůjček**: Pokročilá logika pro správu čtenářů a termínů.
 
+## 🚀 Aktuální cíle (Sprint)
+1. **Implementace LibraryManager**: Dokončení hlavní logiky pro správu kolekce knih a uživatelů.
+2. **Vyhledávací algoritmy**: Filtrování podle žánru a dostupnosti.
+3. **Zabezpečení JSON**: Ošetření stavu, kdy je soubor databáze poškozen nebo prázdný.
+
 ## 💾 Datový model (Snippet)
 ```json
 {
