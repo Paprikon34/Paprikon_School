@@ -19,9 +19,9 @@ Pokročilý systém pro správu knihovny postavený na principech **objektově o
 - [x] **Návrh tříd a relací**: Definována struktura Book a User v JSON.
 - [x] **Základní komponenty**: Implementována třída `Book` s kompletní logikou.
 - [x] **Persistence dat**: Plná podpora JSON (Save/Load).
-- [/] **Library Manager**: Jádro systému (ve vývoji).
-- [ ] **Uživatelské rozhraní**: Interaktivní konzolové menu.
-- [ ] **Systém výpůjček**: Pokročilá logika pro správu čtenářů a termínů.
+- [x] **Library Manager**: Jádro systému (hotovo).
+- [x] **Uživatelské rozhraní**: Interaktivní konzolové menu.
+- [x] **Systém výpůjček**: Pokročilá logika pro správu čtenářů a termínů.
 
 ## 🚀 Aktuální cíle (Sprint)
 1. **Implementace LibraryManager**: Dokončení hlavní logiky pro správu kolekce knih a uživatelů.
