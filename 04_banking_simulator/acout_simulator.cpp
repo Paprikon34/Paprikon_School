@@ -20,7 +20,8 @@ int main() {
     double balance = 0.0;
     double deposit_amount = 0.0;
     double withdraw_amount = 0.0;
-
+    
+// inicializace
     //getting user name
     cout << "Welcome to Account Simulator!" << endl;
     cout << "Please enter your name: ";
