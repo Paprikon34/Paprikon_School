@@ -2,21 +2,26 @@
 #include <string>
 #include "LibraryManager.h"
 
+/**
+ * Zobrazení hlavního menu (Displaying the main menu)
+ */
 void displayMenu() {
-    std::cout << "\n=== Library Management System ===\n";
-    std::cout << "1. Display all books\n";
-    std::cout << "2. Display available books\n";
-    std::cout << "3. Search books by genre\n";
-    std::cout << "4. Display all users\n";
-    std::cout << "5. Add new book\n";
-    std::cout << "6. Add new user\n";
-    std::cout << "7. Borrow a book\n";
-    std::cout << "8. Return a book\n";
-    std::cout << "9. Save and Exit\n";
-    std::cout << "Choice: ";
+    std::cout << "\n========= Library Management System =========\n";
+    std::cout << "1. Display all books         (Všechny knihy)\n";
+    std::cout << "2. Display available books   (Dostupné knihy)\n";
+    std::cout << "3. Search books by genre     (Hledat podle žánru)\n";
+    std::cout << "4. Display all users         (Všichni uživatelé)\n";
+    std::cout << "5. Add new book              (Přidat knihu)\n";
+    std::cout << "6. Add new user              (Přidat uživatele)\n";
+    std::cout << "7. Borrow a book             (Půjčit knihu)\n";
+    std::cout << "8. Return a book             (Vrátit knihu)\n";
+    std::cout << "9. Save and Exit             (Uložit a ukončit)\n";
+    std::cout << "=============================================\n";
+    std::cout << "Choice (Volba): ";
 }
 
 int main() {
+    // Inicializace správce (Initializing the manager)
     LibraryManager manager("data/library.json");
     bool running = true;
 
@@ -25,6 +30,7 @@ int main() {
         int choice;
         std::cin >> choice;
 
+        // Ošetření neplatného vstupu (Handling invalid input)
         if (std::cin.fail()) {
             std::cin.clear();
             std::cin.ignore(10000, '\n');
@@ -97,7 +103,7 @@ int main() {
             case 9:
                 manager.saveData();
                 running = false;
-                std::cout << "Exiting...\n";
+                std::cout << "Exiting system... Goodbye!\n";
                 break;
             default:
                 std::cout << "Invalid choice. Try again.\n";

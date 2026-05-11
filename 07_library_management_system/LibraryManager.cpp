@@ -6,6 +6,9 @@ LibraryManager::LibraryManager(const std::string& path) : dataFilePath(path) {
     loadData();
 }
 
+/**
+ * Načtení dat z JSON souboru (Loading data from JSON file)
+ */
 void LibraryManager::loadData() {
     std::ifstream file(dataFilePath);
     if (!file.is_open()) {
@@ -28,12 +31,15 @@ void LibraryManager::loadData() {
                 users.push_back(User::fromJson(item));
             }
         }
-        std::cout << "Data loaded successfully." << std::endl;
+        std::cout << "Data loaded successfully (" << books.size() << " books, " << users.size() << " users)." << std::endl;
     } catch (const json::parse_error& e) {
         std::cerr << "Error parsing JSON data: " << e.what() << ". Starting with empty database." << std::endl;
     }
 }
 
+/**
+ * Uložení dat do JSON souboru (Saving data to JSON file)
+ */
 void LibraryManager::saveData() const {
     json j;
     j["books"] = json::array();
@@ -49,29 +55,40 @@ void LibraryManager::saveData() const {
     std::ofstream file(dataFilePath);
     if (file.is_open()) {
         file << j.dump(4);
-        std::cout << "Data saved successfully." << std::endl;
+        std::cout << "Data saved successfully to " << dataFilePath << std::endl;
     } else {
         std::cerr << "Error: Could not save data to " << dataFilePath << std::endl;
     }
 }
 
+/**
+ * Přidání nové knihy (Adding a new book)
+ */
 void LibraryManager::addBook(const Book& book) {
     books.push_back(book);
-    std::cout << "Book added successfully.\n";
+    std::cout << "Book '" << book.getTitle() << "' added successfully.\n";
 }
 
+/**
+ * Zobrazení všech knih (Display all books)
+ */
 void LibraryManager::displayBooks() const {
     if (books.empty()) {
         std::cout << "No books in the library.\n";
         return;
     }
+    std::cout << "\n--- Library Inventory ---\n";
     for (const auto& book : books) {
         book.display();
     }
 }
 
+/**
+ * Hledání knih podle žánru (Search books by genre)
+ */
 void LibraryManager::searchBooksByGenre(const std::string& genre) const {
     bool found = false;
+    std::cout << "\n--- Search Results (Genre: " << genre << ") ---\n";
     for (const auto& book : books) {
         if (book.getGenre() == genre) {
             book.display();
@@ -83,8 +100,12 @@ void LibraryManager::searchBooksByGenre(const std::string& genre) const {
     }
 }
 
+/**
+ * Zobrazení dostupných knih (Display available books)
+ */
 void LibraryManager::searchAvailableBooks() const {
     bool found = false;
+    std::cout << "\n--- Available Books ---\n";
     for (const auto& book : books) {
         if (book.isAvailable()) {
             book.display();
@@ -96,21 +117,31 @@ void LibraryManager::searchAvailableBooks() const {
     }
 }
 
+/**
+ * Přidání nového uživatele (Adding a new user)
+ */
 void LibraryManager::addUser(const User& user) {
     users.push_back(user);
-    std::cout << "User added successfully.\n";
+    std::cout << "User '" << user.getName() << "' added successfully.\n";
 }
 
+/**
+ * Zobrazení všech uživatelů (Display all users)
+ */
 void LibraryManager::displayUsers() const {
     if (users.empty()) {
         std::cout << "No users registered.\n";
         return;
     }
+    std::cout << "\n--- Registered Users ---\n";
     for (const auto& user : users) {
         user.display();
     }
 }
 
+/**
+ * Najít knihu podle ID (Find book by ID)
+ */
 Book* LibraryManager::findBook(int id) {
     for (auto& book : books) {
         if (book.getId() == id) {
@@ -120,6 +151,9 @@ Book* LibraryManager::findBook(int id) {
     return nullptr;
 }
 
+/**
+ * Najít uživatele podle ID (Find user by ID)
+ */
 User* LibraryManager::findUser(int id) {
     for (auto& user : users) {
         if (user.getId() == id) {
@@ -129,53 +163,59 @@ User* LibraryManager::findUser(int id) {
     return nullptr;
 }
 
+/**
+ * Logika půjčení knihy (Borrowing logic)
+ */
 void LibraryManager::borrowBook(int bookId, int userId) {
     Book* book = findBook(bookId);
     User* user = findUser(userId);
 
     if (!book) {
-        std::cout << "Book with ID " << bookId << " not found.\n";
+        std::cout << "Error: Book with ID " << bookId << " not found.\n";
         return;
     }
     if (!user) {
-        std::cout << "User with ID " << userId << " not found.\n";
+        std::cout << "Error: User with ID " << userId << " not found.\n";
         return;
     }
 
     if (!book->isAvailable()) {
-        std::cout << "Book is currently not available.\n";
+        std::cout << "Error: Book '" << book->getTitle() << "' is currently not available.\n";
         return;
     }
 
     book->borrowBook(user->getName());
     user->borrowBook();
-    std::cout << "Book '" << book->getTitle() << "' borrowed by " << user->getName() << ".\n";
+    std::cout << "Success: Book '" << book->getTitle() << "' borrowed by " << user->getName() << ".\n";
 }
 
+/**
+ * Logika vrácení knihy (Returning logic)
+ */
 void LibraryManager::returnBook(int bookId, int userId) {
     Book* book = findBook(bookId);
     User* user = findUser(userId);
 
     if (!book) {
-        std::cout << "Book with ID " << bookId << " not found.\n";
+        std::cout << "Error: Book with ID " << bookId << " not found.\n";
         return;
     }
     if (!user) {
-        std::cout << "User with ID " << userId << " not found.\n";
+        std::cout << "Error: User with ID " << userId << " not found.\n";
         return;
     }
 
     if (book->isAvailable()) {
-        std::cout << "Book is already available.\n";
+        std::cout << "Info: Book '" << book->getTitle() << "' is already available.\n";
         return;
     }
 
     if (book->getBorrower() != user->getName()) {
-        std::cout << "Book was not borrowed by this user.\n";
+        std::cout << "Error: Book was not borrowed by " << user->getName() << ".\n";
         return;
     }
 
     book->returnBook();
     user->returnBook();
-    std::cout << "Book '" << book->getTitle() << "' returned by " << user->getName() << ".\n";
+    std::cout << "Success: Book '" << book->getTitle() << "' returned by " << user->getName() << ".\n";
 }

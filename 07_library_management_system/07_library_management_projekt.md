@@ -20,13 +20,14 @@ Pokročilý systém pro správu knihovny postavený na principech **objektově o
 - [x] **Základní komponenty**: Implementována třída `Book` s kompletní logikou.
 - [x] **Persistence dat**: Plná podpora JSON (Save/Load).
 - [x] **Library Manager**: Jádro systému (hotovo).
-- [x] **Uživatelské rozhraní**: Interaktivní konzolové menu.
+- [x] **Uživatelské rozhraní**: Interaktivní konzolové menu s podporou Čj/Aj.
 - [x] **Systém výpůjček**: Pokročilá logika pro správu čtenářů a termínů.
+- [x] **Refaktorizace a Clean Code**: Přidáno bilingvní komentování a ošetření vstupů.
 
 ## 🚀 Aktuální cíle (Sprint)
-1. **Implementace LibraryManager**: Dokončení hlavní logiky pro správu kolekce knih a uživatelů.
-2. **Vyhledávací algoritmy**: Filtrování podle žánru a dostupnosti.
-3. **Zabezpečení JSON**: Ošetření stavu, kdy je soubor databáze poškozen nebo prázdný.
+1. **Projekt dokončen**: Všechny funkční požadavky byly implementovány a otestovány.
+2. **Dokumentace**: Technická dokumentace je v souladu s finálním kódem.
+3. **Udržování**: Projekt je připraven na případné budoucí rozšiřování (např. GUI).
 
 ## 💾 Datový model (Snippet)
 ```json
