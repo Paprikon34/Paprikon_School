@@ -1,0 +1,12 @@
+{
+    "last_updated": "2026-05-12T11:03:53.468300",
+    "project_count": 8,
+    "file_counts": {
+        ".md": 11,
+        ".py": 7,
+        ".cpp": 7,
+        ".h": 3
+    },
+    "total_code_lines": 3013,
+    "total_doc_lines": 618
+}

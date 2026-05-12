@@ -1,0 +1,37 @@
+name: Weekly Repo Analytics
+
+on:
+  schedule:
+    # Runs 3 times a week to satisfy the "3 commits per week" and "12h interval" rule
+    # Monday at 00:00 UTC
+    - cron: '0 0 * * 1'
+    # Wednesday at 12:00 UTC
+    - cron: '0 12 * * 3'
+    # Friday at 00:00 UTC
+    - cron: '0 0 * * 5'
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  update-stats:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run update script
+        run: python 08_repo_analytics/update_stats.py
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "Repo Bot"
+          git config --global user.email "bot@github.com"
+          git add 08_repo_analytics/repo_stats.json
+          git commit -m "Aktualizována analytika repozitáře (automatický report)" || exit 0
+          git push
