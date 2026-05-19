@@ -5,12 +5,14 @@ Automatizovaný systém pro sledování metrik a statistik celého repozitáře.
 
 ## Funkcionalita programu
 - Skenování adresářové struktury a detekce projektů s jejich individuálními statistikami.
-- Počítání souborů podle přípon (.py, .cpp, .md, .h).
-- Analýza celkového počtu řádků kódu a dokumentace (globálně i pro jednotlivé projekty).
+- Sledování počtu adresářů v repozitáři.
+- Počítání souborů podle přípon (.py, .cpp, .md, .h, .json, .txt, .yml, .yaml, .csv).
+- Analýza celkového počtu řádků kódu, dokumentace a datových souborů (globálně i pro jednotlivé projekty).
 - Sledování celkové velikosti repozitáře (KB).
 - Výpočet průměrného počtu řádků na soubor.
 - Identifikace 5 největších souborů v celém repozitáři.
-- Generování a aktualizace rozšířeného datového souboru `repo_stats.json`.
+- Generování a aktualizace datového souboru `repo_stats.json`.
+- Generování formátovaného reportu `repo_report.md` pro lidsky čitelný přehled.
 - Automatizované spouštění pomocí GitHub Actions.
 
 ## Technická část

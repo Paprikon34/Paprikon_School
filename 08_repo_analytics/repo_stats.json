@@ -1,17 +1,26 @@
 {
-    "last_updated": "2026-05-18T03:56:53.745790",
+    "last_updated": "2026-05-19T10:01:02.192763",
     "project_count": 8,
-    "repo_size_kb": 21424.22,
+    "total_directories": 14,
+    "repo_size_kb": 22021.35,
     "file_counts": {
-        ".md": 11,
-        ".cpp": 7,
+        ".md": 12,
+        ".txt": 2,
         ".py": 7,
+        ".json": 4,
+        ".cpp": 7,
         ".h": 3
     },
-    "total_code_lines": 3066,
-    "total_doc_lines": 624,
-    "average_lines_per_file": 131.8,
+    "total_code_lines": 3114,
+    "total_doc_lines": 692,
+    "total_data_lines": 552542,
+    "average_lines_per_file": 15895.7,
     "top_files_by_lines": [
+        {
+            "file": "pokemon.json",
+            "project": "03_poke_lib",
+            "lines": 552173
+        },
         {
             "file": "pokedex_gui.py",
             "project": "03_poke_lib",
@@ -31,53 +40,56 @@
             "file": "bot.py",
             "project": "02_web_scraper_ai",
             "lines": 288
-        },
-        {
-            "file": "LibraryManager.cpp",
-            "project": "07_library_management_system",
-            "lines": 221
         }
     ],
     "project_details": {
+        "01_kamen_nuzky_papir": {
+            "file_count": 2,
+            "code_lines": 379,
+            "doc_lines": 124,
+            "data_lines": 0
+        },
+        "02_web_scraper_ai": {
+            "file_count": 3,
+            "code_lines": 288,
+            "doc_lines": 72,
+            "data_lines": 4
+        },
+        "03_poke_lib": {
+            "file_count": 6,
+            "code_lines": 1428,
+            "doc_lines": 95,
+            "data_lines": 552173
+        },
         "04_banking_simulator": {
             "file_count": 2,
             "code_lines": 127,
-            "doc_lines": 33
-        },
-        "08_repo_analytics": {
-            "file_count": 2,
-            "code_lines": 110,
-            "doc_lines": 19
+            "doc_lines": 33,
+            "data_lines": 0
         },
         "05_maze_generator": {
             "file_count": 2,
             "code_lines": 87,
-            "doc_lines": 25
-        },
-        "03_poke_lib": {
-            "file_count": 5,
-            "code_lines": 1428,
-            "doc_lines": 95
-        },
-        "02_web_scraper_ai": {
-            "file_count": 2,
-            "code_lines": 288,
-            "doc_lines": 72
-        },
-        "01_kamen_nuzky_papir": {
-            "file_count": 2,
-            "code_lines": 379,
-            "doc_lines": 124
+            "doc_lines": 25,
+            "data_lines": 0
         },
         "06_prevod_znaku_ascii": {
             "file_count": 2,
             "code_lines": 46,
-            "doc_lines": 42
+            "doc_lines": 42,
+            "data_lines": 0
         },
         "07_library_management_system": {
-            "file_count": 8,
+            "file_count": 10,
             "code_lines": 601,
-            "doc_lines": 52
+            "doc_lines": 52,
+            "data_lines": 271
+        },
+        "08_repo_analytics": {
+            "file_count": 4,
+            "code_lines": 158,
+            "doc_lines": 87,
+            "data_lines": 86
         }
     }
 }
