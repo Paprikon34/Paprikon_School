@@ -1,8 +1,8 @@
 {
-    "last_updated": "2026-05-19T10:01:02.192763",
+    "last_updated": "2026-05-20T13:21:57.454481",
     "project_count": 8,
     "total_directories": 14,
-    "repo_size_kb": 22021.35,
+    "repo_size_kb": 22037.29,
     "file_counts": {
         ".md": 12,
         ".txt": 2,
@@ -11,10 +11,10 @@
         ".cpp": 7,
         ".h": 3
     },
-    "total_code_lines": 3114,
-    "total_doc_lines": 692,
-    "total_data_lines": 552542,
-    "average_lines_per_file": 15895.7,
+    "total_code_lines": 3377,
+    "total_doc_lines": 707,
+    "total_data_lines": 552571,
+    "average_lines_per_file": 15904.4,
     "top_files_by_lines": [
         {
             "file": "pokemon.json",
@@ -32,14 +32,14 @@
             "lines": 452
         },
         {
+            "file": "update_stats.py",
+            "project": "08_repo_analytics",
+            "lines": 421
+        },
+        {
             "file": "main.py",
             "project": "01_kamen_nuzky_papir",
             "lines": 379
-        },
-        {
-            "file": "bot.py",
-            "project": "02_web_scraper_ai",
-            "lines": 288
         }
     ],
     "project_details": {
@@ -47,49 +47,69 @@
             "file_count": 2,
             "code_lines": 379,
             "doc_lines": 124,
-            "data_lines": 0
+            "data_lines": 0,
+            "has_doc": true
         },
         "02_web_scraper_ai": {
             "file_count": 3,
             "code_lines": 288,
             "doc_lines": 72,
-            "data_lines": 4
+            "data_lines": 4,
+            "has_doc": true
         },
         "03_poke_lib": {
             "file_count": 6,
             "code_lines": 1428,
             "doc_lines": 95,
-            "data_lines": 552173
+            "data_lines": 552173,
+            "has_doc": true
         },
         "04_banking_simulator": {
             "file_count": 2,
             "code_lines": 127,
             "doc_lines": 33,
-            "data_lines": 0
+            "data_lines": 0,
+            "has_doc": true
         },
         "05_maze_generator": {
             "file_count": 2,
             "code_lines": 87,
             "doc_lines": 25,
-            "data_lines": 0
+            "data_lines": 0,
+            "has_doc": true
         },
         "06_prevod_znaku_ascii": {
             "file_count": 2,
             "code_lines": 46,
             "doc_lines": 42,
-            "data_lines": 0
+            "data_lines": 0,
+            "has_doc": true
         },
         "07_library_management_system": {
             "file_count": 10,
             "code_lines": 601,
             "doc_lines": 52,
-            "data_lines": 271
+            "data_lines": 271,
+            "has_doc": true
         },
         "08_repo_analytics": {
             "file_count": 4,
-            "code_lines": 158,
-            "doc_lines": 87,
-            "data_lines": 86
+            "code_lines": 421,
+            "doc_lines": 102,
+            "data_lines": 115,
+            "has_doc": true
         }
+    },
+    "total_commits": 54,
+    "active_days": 34,
+    "last_commit_date": "2026-05-19T10:02:41+02:00",
+    "last_commit_message": "Enhance repo analytics with data files and report",
+    "last_commit_author": "Paprikon34",
+    "weekly_compliance": {
+        "commits_this_week_count": 1,
+        "commits_target_met": false,
+        "intervals_12h_met": false,
+        "docs_rule_met": true,
+        "estimated_discipline_points": 20
     }
 }
