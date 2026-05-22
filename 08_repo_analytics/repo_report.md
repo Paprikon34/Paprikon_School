@@ -1,13 +1,13 @@
 # 📊 Repository Analytics & Compliance Report
 
-*Poslední aktualizace: **20.05.2026 v 13:21:57***
+*Poslední aktualizace: **22.05.2026 v 14:00:34***
 
 > [!IMPORTANT]
 > ### 🎓 Týdenní Hodnocení & Disciplína (Grading Dashboard)
 > Tato sekce vyhodnocuje plnění administrativních podmínek pro získání bonusu **60 bodů** do vašeho Týdenního Indexu.
 > 
 > - **Podmínka 1: Min. 3 commity za týden**
->   - *Stav:* ❌ **1/3** - Nesplněno (Cíl: min 3, aktuálně 1)
+>   - *Stav:* ❌ **2/3** - Nesplněno (Cíl: min 3, aktuálně 2)
 > - **Podmínka 2: Pravidlo 12 hodin rozestupu**
 >   - *Stav:* ❌ - Nesplněno (Není nalezen 12hodinový rozestup mezi 3 commity)
 > - **Podmínka 3: Dokumentace README.md a [nazev]_projekt.md**
@@ -22,21 +22,21 @@
 | :--- | :--- | :--- |
 | **Počet projektů** | `8` | Celkový počet evidovaných projektů |
 | **Počet adresářů** | `14` | Celkový počet složek (mimo skryté) |
-| **Velikost repozitáře** | `22037.29 KB` (~`21.52 MB`) | Celková fyzická velikost souborů |
+| **Velikost repozitáře** | `22039.40 KB` (~`21.52 MB`) | Celková fyzická velikost souborů |
 | **Celkem řádků kódu** | `3377` | Celkový počet řádků ve zdrojových kódech (.py, .cpp, .h) |
-| **Celkem řádků dokumentace** | `707` | Celkový počet řádků v dokumentaci (.md) |
+| **Celkem řádků dokumentace** | `739` | Celkový počet řádků v dokumentaci (.md) |
 | **Celkem datových řádků** | `552571` | Řádky v konfiguracích a datových souborech (.json, .txt, etc) |
-| **Průměrně řádků na soubor** | `15904.4` | Průměrná délka analyzovaného souboru |
+| **Průměrně řádků na soubor** | `15905.3` | Průměrná délka analyzovaného souboru |
 
 ## 🐙 Git Aktivita & Historie
 
 | Metrika | Hodnota | Popis |
 | :--- | :--- | :--- |
-| **Celkový počet commitů** | `54` | Celkový počet verzí v historii |
-| **Počet aktivních dnů** | `34` | Počet dní s alespoň jedním commitem |
+| **Celkový počet commitů** | `55` | Celkový počet verzí v historii |
+| **Počet aktivních dnů** | `35` | Počet dní s alespoň jedním commitem |
 | **Poslední commit (Autor)** | `Paprikon34` | Kdo provedl poslední změnu |
-| **Poslední commit (Zpráva)** | `Enhance repo analytics with data files and report` | Popis poslední úpravy |
-| **Poslední commit (Datum)** | `2026-05-19T10:02:41+02:00` | Čas poslední úpravy |
+| **Poslední commit (Zpráva)** | `VylepĹˇena analytika repozitĂˇĹ™e o kontrolu plnÄ›nĂ­ podmĂ­nek a automatickĂ˝ update README.md` | Popis poslední úpravy |
+| **Poslední commit (Datum)** | `2026-05-20T13:23:07+02:00` | Čas poslední úpravy |
 
 ## 🗂️ Distribuce přípon souborů
 
@@ -53,7 +53,7 @@
 ```mermaid
 pie title "Distribuce řádků v repozitáři"
     "Zdrojový kód" : 3377
-    "Dokumentace" : 707
+    "Dokumentace" : 739
     "Data & Konfigurace" : 552571
 ```
 
@@ -78,4 +78,4 @@ pie title "Distribuce řádků v repozitáři"
 | **05_maze_generator** | 2 | 87 | 25 | 0 | ✅ Odevzdána |
 | **06_prevod_znaku_ascii** | 2 | 46 | 42 | 0 | ✅ Odevzdána |
 | **07_library_management_system** | 10 | 601 | 52 | 271 | ✅ Odevzdána |
-| **08_repo_analytics** | 4 | 421 | 102 | 115 | ✅ Odevzdána |
+| **08_repo_analytics** | 4 | 421 | 134 | 115 | ✅ Odevzdána |
