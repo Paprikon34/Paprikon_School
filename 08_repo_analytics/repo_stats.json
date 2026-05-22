@@ -1,14 +1,14 @@
 {
-    "last_updated": "2026-05-22T14:00:34.549069",
+    "last_updated": "2026-05-20T13:21:57.454481",
     "project_count": 8,
     "total_directories": 14,
-    "repo_size_kb": 22039.4,
+    "repo_size_kb": 22037.29,
     "file_counts": {
-        ".md": 12,
         ".txt": 2,
+        ".md": 12,
+        ".cpp": 7,
         ".py": 7,
         ".json": 4,
-        ".cpp": 7,
         ".h": 3
     },
     "total_code_lines": 3377,
@@ -43,18 +43,25 @@
         }
     ],
     "project_details": {
-        "01_kamen_nuzky_papir": {
+        "04_banking_simulator": {
             "file_count": 2,
-            "code_lines": 379,
-            "doc_lines": 124,
+            "code_lines": 127,
+            "doc_lines": 33,
             "data_lines": 0,
             "has_doc": true
         },
-        "02_web_scraper_ai": {
-            "file_count": 3,
-            "code_lines": 288,
-            "doc_lines": 72,
-            "data_lines": 4,
+        "08_repo_analytics": {
+            "file_count": 4,
+            "code_lines": 421,
+            "doc_lines": 102,
+            "data_lines": 115,
+            "has_doc": true
+        },
+        "05_maze_generator": {
+            "file_count": 2,
+            "code_lines": 87,
+            "doc_lines": 25,
+            "data_lines": 0,
             "has_doc": true
         },
         "03_poke_lib": {
@@ -64,17 +71,17 @@
             "data_lines": 552173,
             "has_doc": true
         },
-        "04_banking_simulator": {
-            "file_count": 2,
-            "code_lines": 127,
-            "doc_lines": 33,
-            "data_lines": 0,
+        "02_web_scraper_ai": {
+            "file_count": 3,
+            "code_lines": 288,
+            "doc_lines": 72,
+            "data_lines": 4,
             "has_doc": true
         },
-        "05_maze_generator": {
+        "01_kamen_nuzky_papir": {
             "file_count": 2,
-            "code_lines": 87,
-            "doc_lines": 25,
+            "code_lines": 379,
+            "doc_lines": 124,
             "data_lines": 0,
             "has_doc": true
         },
@@ -95,18 +102,18 @@
         "08_repo_analytics": {
             "file_count": 4,
             "code_lines": 421,
-            "doc_lines": 134,
+            "doc_lines": 102,
             "data_lines": 115,
             "has_doc": true
         }
     },
-    "total_commits": 55,
-    "active_days": 35,
-    "last_commit_date": "2026-05-20T13:23:07+02:00",
-    "last_commit_message": "VylepĹˇena analytika repozitĂˇĹ™e o kontrolu plnÄ›nĂ­ podmĂ­nek a automatickĂ˝ update README.md",
+    "total_commits": 54,
+    "active_days": 34,
+    "last_commit_date": "2026-05-19T10:02:41+02:00",
+    "last_commit_message": "Enhance repo analytics with data files and report",
     "last_commit_author": "Paprikon34",
     "weekly_compliance": {
-        "commits_this_week_count": 2,
+        "commits_this_week_count": 1,
         "commits_target_met": false,
         "intervals_12h_met": false,
         "docs_rule_met": true,
