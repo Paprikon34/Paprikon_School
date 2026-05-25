@@ -1,8 +1,8 @@
 {
-    "last_updated": "2026-05-20T13:21:57.454481",
+    "last_updated": "2026-05-25T04:05:29.153664",
     "project_count": 8,
     "total_directories": 14,
-    "repo_size_kb": 22037.29,
+    "repo_size_kb": 21446.05,
     "file_counts": {
         ".txt": 2,
         ".md": 12,
@@ -13,8 +13,8 @@
     },
     "total_code_lines": 3377,
     "total_doc_lines": 739,
-    "total_data_lines": 552571,
-    "average_lines_per_file": 15905.3,
+    "total_data_lines": 552578,
+    "average_lines_per_file": 15905.5,
     "top_files_by_lines": [
         {
             "file": "pokemon.json",
@@ -53,8 +53,8 @@
         "08_repo_analytics": {
             "file_count": 4,
             "code_lines": 421,
-            "doc_lines": 102,
-            "data_lines": 115,
+            "doc_lines": 134,
+            "data_lines": 122,
             "has_doc": true
         },
         "05_maze_generator": {
@@ -98,22 +98,15 @@
             "doc_lines": 52,
             "data_lines": 271,
             "has_doc": true
-        },
-        "08_repo_analytics": {
-            "file_count": 4,
-            "code_lines": 421,
-            "doc_lines": 102,
-            "data_lines": 115,
-            "has_doc": true
         }
     },
-    "total_commits": 54,
-    "active_days": 34,
-    "last_commit_date": "2026-05-19T10:02:41+02:00",
-    "last_commit_message": "Enhance repo analytics with data files and report",
+    "total_commits": 1,
+    "active_days": 1,
+    "last_commit_date": "2026-05-22T14:03:33+02:00",
+    "last_commit_message": "merge comint from another device",
     "last_commit_author": "Paprikon34",
     "weekly_compliance": {
-        "commits_this_week_count": 1,
+        "commits_this_week_count": 0,
         "commits_target_met": false,
         "intervals_12h_met": false,
         "docs_rule_met": true,
