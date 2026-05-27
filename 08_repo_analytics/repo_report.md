@@ -1,13 +1,13 @@
 # 📊 Repository Analytics & Compliance Report
 
-*Poslední aktualizace: **22.05.2026 v 14:00:34***
+*Poslední aktualizace: **27.05.2026 v 10:05:15***
 
 > [!IMPORTANT]
 > ### 🎓 Týdenní Hodnocení & Disciplína (Grading Dashboard)
 > Tato sekce vyhodnocuje plnění administrativních podmínek pro získání bonusu **60 bodů** do vašeho Týdenního Indexu.
 > 
 > - **Podmínka 1: Min. 3 commity za týden**
->   - *Stav:* ❌ **2/3** - Nesplněno (Cíl: min 3, aktuálně 2)
+>   - *Stav:* ❌ **0/3** - Nesplněno (Cíl: min 3, aktuálně 0)
 > - **Podmínka 2: Pravidlo 12 hodin rozestupu**
 >   - *Stav:* ❌ - Nesplněno (Není nalezen 12hodinový rozestup mezi 3 commity)
 > - **Podmínka 3: Dokumentace README.md a [nazev]_projekt.md**
@@ -22,21 +22,22 @@
 | :--- | :--- | :--- |
 | **Počet projektů** | `8` | Celkový počet evidovaných projektů |
 | **Počet adresářů** | `14` | Celkový počet složek (mimo skryté) |
-| **Velikost repozitáře** | `22039.40 KB` (~`21.52 MB`) | Celková fyzická velikost souborů |
-| **Celkem řádků kódu** | `3377` | Celkový počet řádků ve zdrojových kódech (.py, .cpp, .h) |
+| **Velikost repozitáře** | `22040.71 KB` (~`21.52 MB`) | Celková fyzická velikost souborů |
+| **Celkem řádků kódu** | `3402` | Celkový počet řádků ve zdrojových kódech (.py, .cpp, .h) |
 | **Celkem řádků dokumentace** | `739` | Celkový počet řádků v dokumentaci (.md) |
 | **Celkem datových řádků** | `552571` | Řádky v konfiguracích a datových souborech (.json, .txt, etc) |
-| **Průměrně řádků na soubor** | `15905.3` | Průměrná délka analyzovaného souboru |
+| **Průměrně řádků na soubor** | `15906.1` | Průměrná délka všech souborů (včetně dat) |
+| **Průměrně kód/dok na soubor** | `142.8` | Průměrná délka bez datových souborů |
 
 ## 🐙 Git Aktivita & Historie
 
 | Metrika | Hodnota | Popis |
 | :--- | :--- | :--- |
-| **Celkový počet commitů** | `55` | Celkový počet verzí v historii |
-| **Počet aktivních dnů** | `35` | Počet dní s alespoň jedním commitem |
-| **Poslední commit (Autor)** | `Paprikon34` | Kdo provedl poslední změnu |
-| **Poslední commit (Zpráva)** | `VylepĹˇena analytika repozitĂˇĹ™e o kontrolu plnÄ›nĂ­ podmĂ­nek a automatickĂ˝ update README.md` | Popis poslední úpravy |
-| **Poslední commit (Datum)** | `2026-05-20T13:23:07+02:00` | Čas poslední úpravy |
+| **Celkový počet commitů** | `60` | Celkový počet verzí v historii |
+| **Počet aktivních dnů** | `37` | Počet dní s alespoň jedním commitem |
+| **Poslední commit (Autor)** | `Repo Bot` | Kdo provedl poslední změnu |
+| **Poslední commit (Zpráva)** | `AktualizovĂˇna analytika repozitĂˇĹ™e (automatickĂ˝ report)` | Popis poslední úpravy |
+| **Poslední commit (Datum)** | `2026-05-25T04:05:29+00:00` | Čas poslední úpravy |
 
 ## 🗂️ Distribuce přípon souborů
 
@@ -52,7 +53,7 @@
 ### 📊 Poměr řádků v repozitáři
 ```mermaid
 pie title "Distribuce řádků v repozitáři"
-    "Zdrojový kód" : 3377
+    "Zdrojový kód" : 3402
     "Dokumentace" : 739
     "Data & Konfigurace" : 552571
 ```
@@ -64,8 +65,18 @@ pie title "Distribuce řádků v repozitáři"
 | 1 | `pokemon.json` | 03_poke_lib | 552173 |
 | 2 | `pokedex_gui.py` | 03_poke_lib | 833 |
 | 3 | `fetch_pokedata.py` | 03_poke_lib | 452 |
-| 4 | `update_stats.py` | 08_repo_analytics | 421 |
+| 4 | `update_stats.py` | 08_repo_analytics | 446 |
 | 5 | `main.py` | 01_kamen_nuzky_papir | 379 |
+
+## 🕒 5 Naposledy upravených souborů
+
+| # | Název souboru | Projekt | Datum úpravy |
+| :--- | :--- | :--- | :---: |
+| 1 | `update_stats.py` | 08_repo_analytics | 27.05.2026 10:04 |
+| 2 | `README.md` | root | 27.05.2026 10:03 |
+| 3 | `repo_stats.json` | 08_repo_analytics | 27.05.2026 10:03 |
+| 4 | `repo_report.md` | 08_repo_analytics | 27.05.2026 10:03 |
+| 5 | `08_repo_analytics_projekt.md` | 08_repo_analytics | 27.05.2026 10:03 |
 
 ## 📁 Detailní přehled jednotlivých projektů
 
@@ -78,4 +89,4 @@ pie title "Distribuce řádků v repozitáři"
 | **05_maze_generator** | 2 | 87 | 25 | 0 | ✅ Odevzdána |
 | **06_prevod_znaku_ascii** | 2 | 46 | 42 | 0 | ✅ Odevzdána |
 | **07_library_management_system** | 10 | 601 | 52 | 271 | ✅ Odevzdána |
-| **08_repo_analytics** | 4 | 421 | 134 | 115 | ✅ Odevzdána |
+| **08_repo_analytics** | 4 | 446 | 134 | 115 | ✅ Odevzdána |

@@ -196,7 +196,8 @@ def get_repo_stats():
                         all_files_info.append({
                             "file": os.path.basename(file_path),
                             "project": project_name or "root",
-                            "lines": line_count
+                            "lines": line_count,
+                            "modified": os.path.getmtime(file_path)
                         })
                 except:
                     pass
@@ -207,8 +208,20 @@ def get_repo_stats():
     if total_files > 0:
         total_lines = stats["total_code_lines"] + stats["total_doc_lines"] + stats["total_data_lines"]
         stats["average_lines_per_file"] = round(total_lines / total_files, 1)
+        
+        code_doc_lines = stats["total_code_lines"] + stats["total_doc_lines"]
+        code_doc_files = sum(stats["file_counts"].get(ext, 0) for ext in [".py", ".cpp", ".h", ".md"])
+        if code_doc_files > 0:
+            stats["average_code_doc_lines"] = round(code_doc_lines / code_doc_files, 1)
     
     stats["top_files_by_lines"] = sorted(all_files_info, key=lambda x: x["lines"], reverse=True)[:5]
+    
+    recent_files = sorted(all_files_info, key=lambda x: x.get("modified", 0), reverse=True)[:5]
+    for f in recent_files:
+        if "modified" in f:
+            f["modified_date"] = datetime.fromtimestamp(f["modified"]).strftime('%d.%m.%Y %H:%M')
+            del f["modified"]
+    stats["recently_modified_files"] = recent_files
     
     # Query Git stats and merge them
     git_stats = get_git_stats(root_dir)
@@ -339,7 +352,11 @@ def generate_markdown_report(stats, output_path):
     md_content += f"| **Celkem řádků kódu** | `{stats['total_code_lines']}` | Celkový počet řádků ve zdrojových kódech (.py, .cpp, .h) |\n"
     md_content += f"| **Celkem řádků dokumentace** | `{stats['total_doc_lines']}` | Celkový počet řádků v dokumentaci (.md) |\n"
     md_content += f"| **Celkem datových řádků** | `{stats['total_data_lines']}` | Řádky v konfiguracích a datových souborech (.json, .txt, etc) |\n"
-    md_content += f"| **Průměrně řádků na soubor** | `{stats['average_lines_per_file']}` | Průměrná délka analyzovaného souboru |\n\n"
+    md_content += f"| **Průměrně řádků na soubor** | `{stats['average_lines_per_file']}` | Průměrná délka všech souborů (včetně dat) |\n"
+    if "average_code_doc_lines" in stats:
+        md_content += f"| **Průměrně kód/dok na soubor** | `{stats['average_code_doc_lines']}` | Průměrná délka bez datových souborů |\n\n"
+    else:
+        md_content += "\n\n"
     
     # 🐙 Git Aktivita & Historie
     md_content += f"## 🐙 Git Aktivita & Historie\n\n"
@@ -376,6 +393,14 @@ def generate_markdown_report(stats, output_path):
     md_content += f"| :--- | :--- | :--- | :---: |\n"
     for idx, f in enumerate(stats['top_files_by_lines'], 1):
         md_content += f"| {idx} | `{f['file']}` | {f['project']} | {f['lines']} |\n"
+    md_content += "\n"
+    
+    # 🕒 5 Naposledy upravených souborů
+    md_content += f"## 🕒 5 Naposledy upravených souborů\n\n"
+    md_content += f"| # | Název souboru | Projekt | Datum úpravy |\n"
+    md_content += f"| :--- | :--- | :--- | :---: |\n"
+    for idx, f in enumerate(stats.get('recently_modified_files', []), 1):
+        md_content += f"| {idx} | `{f['file']}` | {f['project']} | {f.get('modified_date', 'N/A')} |\n"
     md_content += "\n"
     
     # 📁 Project Details Table
