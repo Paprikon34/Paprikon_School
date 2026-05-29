@@ -117,6 +117,7 @@ def get_repo_stats():
         "total_directories": 0,
         "repo_size_kb": 0,
         "file_counts": {},
+        "lines_by_extension": {},
         "total_code_lines": 0,
         "total_doc_lines": 0,
         "total_data_lines": 0,
@@ -173,6 +174,8 @@ def get_repo_stats():
                     with open(file_path, 'r', encoding='utf-8') as f:
                         line_count = len(f.readlines())
                         
+                        stats["lines_by_extension"][ext] = stats.get("lines_by_extension", {}).get(ext, 0) + line_count
+                        
                         if ext == ".md":
                             stats["total_doc_lines"] += line_count
                         elif ext in [".json", ".csv", ".txt", ".yml", ".yaml"]:
@@ -204,6 +207,36 @@ def get_repo_stats():
     
     stats["project_count"] = len(stats["project_details"])
     stats["repo_size_kb"] = round(total_bytes / 1024, 2)
+    
+    total_tracked_lines = sum(stats.get("lines_by_extension", {}).values())
+    stats["language_metrics"] = {}
+    
+    language_map = {
+        ".py": "Python",
+        ".cpp": "C++",
+        ".h": "C/C++ Header",
+        ".md": "Markdown",
+        ".json": "JSON",
+        ".txt": "Text",
+        ".yml": "YAML",
+        ".yaml": "YAML",
+        ".csv": "CSV",
+        ".gd": "GDScript",
+        ".tscn": "Godot Scene"
+    }
+
+    if total_tracked_lines > 0:
+        for ext, lines in stats.get("lines_by_extension", {}).items():
+            lang_name = language_map.get(ext, ext)
+            if lang_name not in stats["language_metrics"]:
+                 stats["language_metrics"][lang_name] = {"lines": 0, "percentage": 0.0}
+            stats["language_metrics"][lang_name]["lines"] += lines
+            
+        for lang_name, data in stats["language_metrics"].items():
+            data["percentage"] = round((data["lines"] / total_tracked_lines) * 100, 2)
+            
+        # Sort languages by percentage
+        stats["language_metrics"] = dict(sorted(stats["language_metrics"].items(), key=lambda item: item[1]["percentage"], reverse=True))
     
     if total_files > 0:
         total_lines = stats["total_code_lines"] + stats["total_doc_lines"] + stats["total_data_lines"]
@@ -279,6 +312,15 @@ def update_readme_stats(stats, readme_path):
         else:
             doc_status = f"Rozpracováno ({documented_count}/{total_projects}) 🚧"
             
+        top_langs = []
+        if "language_metrics" in stats:
+            for lang in stats["language_metrics"].keys():
+                if lang not in ["JSON", "Text", "YAML", "CSV"]:
+                    top_langs.append(lang)
+                    if len(top_langs) >= 3:
+                        break
+        main_langs_str = ", ".join(top_langs) if top_langs else "Python, C++"
+
         new_table = f"""{start_tag}
 
 | Metrika | Hodnota |
@@ -287,7 +329,7 @@ def update_readme_stats(stats, readme_path):
 | **Celkem řádků kódu** | {stats['total_code_lines']} |
 | **Celkem dokumentace** | {stats['total_doc_lines']} řádků |
 | **Velikost repozitáře** | ~{repo_size_mb} MB |
-| **Hlavní jazyky** | Python, C++ |
+| **Hlavní jazyky** | {main_langs_str} |
 | **Stav dokumentace** | {doc_status} |
 | **Průměrná náročnost** | ⭐⭐⭐⭐ (Pokročilý) |
 """
@@ -368,6 +410,15 @@ def generate_markdown_report(stats, output_path):
     md_content += f"| **Poslední commit (Zpráva)** | `{stats.get('last_commit_message', 'N/A')}` | Popis poslední úpravy |\n"
     md_content += f"| **Poslední commit (Datum)** | `{stats.get('last_commit_date', 'N/A')}` | Čas poslední úpravy |\n\n"
     
+    # 📝 Statistiky jazyků
+    md_content += f"## 📝 Statistiky jazyků (podle řádků)\n\n"
+    md_content += f"| Jazyk | Počet řádků | Podíl z celku |\n"
+    md_content += f"| :--- | :---: | :---: |\n"
+    if "language_metrics" in stats:
+        for lang, data in stats["language_metrics"].items():
+            md_content += f"| **{lang}** | {data['lines']} | {data['percentage']:.1f}% |\n"
+    md_content += "\n"
+
     # 🗂️ File Extensions Table
     md_content += f"## 🗂️ Distribuce přípon souborů\n\n"
     md_content += f"| Přípona | Počet souborů | Podíl z celku |\n"
@@ -386,6 +437,14 @@ def generate_markdown_report(stats, output_path):
     md_content += f"    \"Dokumentace\" : {stats['total_doc_lines']}\n"
     md_content += f"    \"Data & Konfigurace\" : {stats['total_data_lines']}\n"
     md_content += f"```\n\n"
+
+    if "language_metrics" in stats and stats["language_metrics"]:
+        md_content += f"### 📊 Podíl jednotlivých jazyků\n"
+        md_content += f"```mermaid\n"
+        md_content += f"pie title \"Zastoupení jazyků\"\n"
+        for lang, data in stats["language_metrics"].items():
+            md_content += f"    \"{lang}\" : {data['lines']}\n"
+        md_content += f"```\n\n"
     
     # 🏆 Top 5 Largest Files
     md_content += f"## 🏆 5 Největších souborů (podle řádků)\n\n"
