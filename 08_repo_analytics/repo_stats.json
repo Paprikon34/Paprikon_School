@@ -1,82 +1,61 @@
 {
-    "last_updated": "2026-05-29T09:02:05.169217",
+    "last_updated": "2026-06-01T04:20:45.588401",
     "project_count": 8,
     "total_directories": 14,
-    "repo_size_kb": 22044.9,
+    "repo_size_kb": 21452.56,
     "file_counts": {
-        ".md": 12,
         ".txt": 2,
+        ".md": 12,
+        ".cpp": 7,
         ".py": 7,
         ".json": 4,
-        ".cpp": 7,
         ".h": 3
     },
     "lines_by_extension": {
-        ".md": 750,
         ".txt": 12,
-        ".py": 2612,
-        ".json": 552597,
+        ".md": 772,
         ".cpp": 717,
+        ".py": 2612,
+        ".json": 552631,
         ".h": 132
     },
     "total_code_lines": 3461,
-    "total_doc_lines": 750,
-    "total_data_lines": 552609,
-    "average_lines_per_file": 15909.1,
+    "total_doc_lines": 772,
+    "total_data_lines": 552643,
+    "average_lines_per_file": 15910.7,
     "top_files_by_lines": [
         {
             "file": "pokemon.json",
             "project": "03_poke_lib",
             "lines": 552173,
-            "modified": 1774856561.3982427
+            "modified": 1780287644.8978636
         },
         {
             "file": "pokedex_gui.py",
             "project": "03_poke_lib",
             "lines": 833,
-            "modified": 1776665845.1352592
+            "modified": 1780287644.869863
         },
         {
             "file": "update_stats.py",
             "project": "08_repo_analytics",
             "lines": 505,
-            "modified_date": "29.05.2026 09:00"
+            "modified": 1780287644.905014
         },
         {
             "file": "fetch_pokedata.py",
             "project": "03_poke_lib",
             "lines": 452,
-            "modified": 1776665845.1280527
+            "modified": 1780287644.869863
         },
         {
             "file": "main.py",
             "project": "01_kamen_nuzky_papir",
             "lines": 379,
-            "modified": 1774850442.0716434
+            "modified": 1780287644.8508625
         }
     ],
     "project_details": {
-        "01_kamen_nuzky_papir": {
-            "file_count": 2,
-            "code_lines": 379,
-            "doc_lines": 124,
-            "data_lines": 0,
-            "has_doc": true
-        },
-        "02_web_scraper_ai": {
-            "file_count": 3,
-            "code_lines": 288,
-            "doc_lines": 72,
-            "data_lines": 4,
-            "has_doc": true
-        },
-        "03_poke_lib": {
-            "file_count": 6,
-            "code_lines": 1428,
-            "doc_lines": 95,
-            "data_lines": 552173,
-            "has_doc": true
-        },
         "04_banking_simulator": {
             "file_count": 2,
             "code_lines": 127,
@@ -91,11 +70,25 @@
             "data_lines": 0,
             "has_doc": true
         },
-        "06_prevod_znaku_ascii": {
+        "03_poke_lib": {
+            "file_count": 6,
+            "code_lines": 1428,
+            "doc_lines": 95,
+            "data_lines": 552173,
+            "has_doc": true
+        },
+        "01_kamen_nuzky_papir": {
             "file_count": 2,
-            "code_lines": 46,
-            "doc_lines": 42,
+            "code_lines": 379,
+            "doc_lines": 124,
             "data_lines": 0,
+            "has_doc": true
+        },
+        "02_web_scraper_ai": {
+            "file_count": 3,
+            "code_lines": 288,
+            "doc_lines": 72,
+            "data_lines": 4,
             "has_doc": true
         },
         "07_library_management_system": {
@@ -108,14 +101,21 @@
         "08_repo_analytics": {
             "file_count": 4,
             "code_lines": 505,
-            "doc_lines": 145,
-            "data_lines": 153,
+            "doc_lines": 167,
+            "data_lines": 187,
+            "has_doc": true
+        },
+        "06_prevod_znaku_ascii": {
+            "file_count": 2,
+            "code_lines": 46,
+            "doc_lines": 42,
+            "data_lines": 0,
             "has_doc": true
         }
     },
     "language_metrics": {
         "JSON": {
-            "lines": 552597,
+            "lines": 552631,
             "percentage": 99.24
         },
         "Python": {
@@ -123,8 +123,8 @@
             "percentage": 0.47
         },
         "Markdown": {
-            "lines": 750,
-            "percentage": 0.13
+            "lines": 772,
+            "percentage": 0.14
         },
         "C++": {
             "lines": 717,
@@ -139,46 +139,46 @@
             "percentage": 0.0
         }
     },
-    "average_code_doc_lines": 145.2,
+    "average_code_doc_lines": 146.0,
     "recently_modified_files": [
         {
-            "file": "update_stats.py",
-            "project": "08_repo_analytics",
-            "lines": 505,
-            "modified_date": "29.05.2026 09:00"
+            "file": "requirements.txt",
+            "project": "root",
+            "lines": 8,
+            "modified_date": "01.06.2026 04:20"
         },
         {
-            "file": "repo_stats.json",
-            "project": "08_repo_analytics",
-            "lines": 153,
-            "modified_date": "29.05.2026 08:57"
+            "file": "hodnocení.md",
+            "project": "root",
+            "lines": 43,
+            "modified_date": "01.06.2026 04:20"
+        },
+        {
+            "file": "pozadavky.md",
+            "project": "root",
+            "lines": 41,
+            "modified_date": "01.06.2026 04:20"
         },
         {
             "file": "README.md",
             "project": "root",
             "lines": 78,
-            "modified_date": "27.05.2026 10:05"
+            "modified_date": "01.06.2026 04:20"
         },
         {
-            "file": "repo_report.md",
+            "file": "repo_stats.json",
             "project": "08_repo_analytics",
-            "lines": 92,
-            "modified_date": "27.05.2026 10:05"
-        },
-        {
-            "file": "08_repo_analytics_projekt.md",
-            "project": "08_repo_analytics",
-            "lines": 53,
-            "modified_date": "27.05.2026 10:03"
+            "lines": 187,
+            "modified_date": "01.06.2026 04:20"
         }
     ],
-    "total_commits": 63,
-    "active_days": 39,
-    "last_commit_date": "2026-05-29T04:19:05+00:00",
-    "last_commit_message": "AktualizovĂˇna analytika repozitĂˇĹ™e (automatickĂ˝ report)",
-    "last_commit_author": "Repo Bot",
+    "total_commits": 1,
+    "active_days": 1,
+    "last_commit_date": "2026-05-29T09:03:01+02:00",
+    "last_commit_message": "Update repo analytics & add language metrics",
+    "last_commit_author": "Patrik Michael Balog",
     "weekly_compliance": {
-        "commits_this_week_count": 1,
+        "commits_this_week_count": 0,
         "commits_target_met": false,
         "intervals_12h_met": false,
         "docs_rule_met": true,
