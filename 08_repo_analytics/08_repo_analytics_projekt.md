@@ -11,7 +11,8 @@ Program je rozdělen do několika modulů, které automaticky skenují repozitá
    - Sledování celkového počtu složek a fyzické velikosti repozitáře v KB.
    - Počítání souborů podle klíčových přípon (`.py`, `.cpp`, `.md`, `.h`, `.json`, `.txt`, `.yml`, `.yaml`, `.csv`).
    - Analýza řádků rozdělených na kód, dokumentaci a datové/konfigurační soubory.
-   - Identifikace 5 největších souborů v celém repozitáři podle počtu řádků.
+   - Měření fyzické velikosti (KB) jednotlivých souborů a jejich celková agregace pro každý projekt.
+   - Identifikace 5 největších souborů v celém repozitáři podle počtu řádků a jejich velikosti v KB.
 
 2. **Git integrace a analýza historie**:
    - Analýza historie commitů z `git log`.

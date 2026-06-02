@@ -153,6 +153,7 @@ def get_repo_stats():
                     "code_lines": 0,
                     "doc_lines": 0,
                     "data_lines": 0,
+                    "size_kb": 0.0,
                     "has_doc": False
                 }
         
@@ -161,7 +162,8 @@ def get_repo_stats():
             ext = os.path.splitext(file)[1]
             
             try:
-                total_bytes += os.path.getsize(file_path)
+                file_size_bytes = os.path.getsize(file_path)
+                total_bytes += file_size_bytes
             except:
                 continue
 
@@ -185,6 +187,7 @@ def get_repo_stats():
                         
                         if project_name and project_name in stats["project_details"]:
                             stats["project_details"][project_name]["file_count"] += 1
+                            stats["project_details"][project_name]["size_kb"] += file_size_bytes / 1024.0
                             if ext == ".md":
                                 stats["project_details"][project_name]["doc_lines"] += line_count
                             elif ext in [".json", ".csv", ".txt", ".yml", ".yaml"]:
@@ -200,11 +203,16 @@ def get_repo_stats():
                             "file": os.path.basename(file_path),
                             "project": project_name or "root",
                             "lines": line_count,
+                            "size_kb": round(file_size_bytes / 1024.0, 2),
                             "modified": os.path.getmtime(file_path)
                         })
                 except:
                     pass
     
+    for proj_name, details in stats["project_details"].items():
+        if "size_kb" in details:
+            details["size_kb"] = round(details["size_kb"], 2)
+
     stats["project_count"] = len(stats["project_details"])
     stats["repo_size_kb"] = round(total_bytes / 1024, 2)
     
@@ -448,27 +456,27 @@ def generate_markdown_report(stats, output_path):
     
     # 🏆 Top 5 Largest Files
     md_content += f"## 🏆 5 Největších souborů (podle řádků)\n\n"
-    md_content += f"| # | Název souboru | Projekt | Počet řádků |\n"
-    md_content += f"| :--- | :--- | :--- | :---: |\n"
+    md_content += f"| # | Název souboru | Projekt | Počet řádků | Velikost |\n"
+    md_content += f"| :--- | :--- | :--- | :---: | :---: |\n"
     for idx, f in enumerate(stats['top_files_by_lines'], 1):
-        md_content += f"| {idx} | `{f['file']}` | {f['project']} | {f['lines']} |\n"
+        md_content += f"| {idx} | `{f['file']}` | {f['project']} | {f['lines']} | `{f.get('size_kb', 0.0):.2f} KB` |\n"
     md_content += "\n"
     
     # 🕒 5 Naposledy upravených souborů
     md_content += f"## 🕒 5 Naposledy upravených souborů\n\n"
-    md_content += f"| # | Název souboru | Projekt | Datum úpravy |\n"
-    md_content += f"| :--- | :--- | :--- | :---: |\n"
+    md_content += f"| # | Název souboru | Projekt | Datum úpravy | Velikost |\n"
+    md_content += f"| :--- | :--- | :--- | :---: | :---: |\n"
     for idx, f in enumerate(stats.get('recently_modified_files', []), 1):
-        md_content += f"| {idx} | `{f['file']}` | {f['project']} | {f.get('modified_date', 'N/A')} |\n"
+        md_content += f"| {idx} | `{f['file']}` | {f['project']} | {f.get('modified_date', 'N/A')} | `{f.get('size_kb', 0.0):.2f} KB` |\n"
     md_content += "\n"
     
     # 📁 Project Details Table
     md_content += f"## 📁 Detailní přehled jednotlivých projektů\n\n"
-    md_content += f"| ID / Složka | Soubory | Kód (řádky) | Dokumentace | Data (řádky) | Stav Dokumentace |\n"
-    md_content += f"| :--- | :---: | :---: | :---: | :---: | :---: |\n"
+    md_content += f"| ID / Složka | Soubory | Kód (řádky) | Dokumentace | Data (řádky) | Velikost | Stav Dokumentace |\n"
+    md_content += f"| :--- | :---: | :---: | :---: | :---: | :---: | :---: |\n"
     for proj, details in sorted(stats['project_details'].items()):
         proj_doc_status = "✅ Odevzdána" if details.get('has_doc', False) else "❌ Chybí"
-        md_content += f"| **{proj}** | {details.get('file_count', 0)} | {details.get('code_lines', 0)} | {details.get('doc_lines', 0)} | {details.get('data_lines', 0)} | {proj_doc_status} |\n"
+        md_content += f"| **{proj}** | {details.get('file_count', 0)} | {details.get('code_lines', 0)} | {details.get('doc_lines', 0)} | {details.get('data_lines', 0)} | `{details.get('size_kb', 0.0):.2f} KB` | {proj_doc_status} |\n"
     
     with open(output_path, "w", encoding='utf-8') as f:
         f.write(md_content)

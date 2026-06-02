@@ -67,8 +67,8 @@ Při vývoji jsou striktně dodržovány následující principy:
 | Metrika | Hodnota |
 | :--- | :--- |
 | **Počet projektů** | 8 |
-| **Celkem řádků kódu** | 3461 |
-| **Celkem dokumentace** | 750 řádků |
+| **Celkem řádků kódu** | 3469 |
+| **Celkem dokumentace** | 773 řádků |
 | **Velikost repozitáře** | ~21.53 MB |
 | **Hlavní jazyky** | Python, Markdown, C++ |
 | **Stav dokumentace** | 100% (Up to code) ✅ |
