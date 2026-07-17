@@ -1,23 +1,23 @@
 {
-    "last_updated": "2026-07-15T13:27:45.790965",
+    "last_updated": "2026-07-17T03:23:04.120171",
     "project_count": 8,
     "total_directories": 14,
-    "repo_size_kb": 21454.01,
+    "repo_size_kb": 21454.0,
     "file_counts": {
         ".md": 12,
         ".txt": 2,
         ".py": 7,
         ".cpp": 7,
-        ".json": 4,
-        ".h": 3
+        ".h": 3,
+        ".json": 4
     },
     "lines_by_extension": {
         ".md": 773,
         ".txt": 12,
         ".py": 2620,
         ".cpp": 717,
-        ".json": 552649,
-        ".h": 132
+        ".h": 132,
+        ".json": 552649
     },
     "total_code_lines": 3469,
     "total_doc_lines": 773,
@@ -29,44 +29,44 @@
             "project": "03_poke_lib",
             "lines": 552173,
             "size_kb": 11528.66,
-            "modified": 1784122065.430277
+            "modified": 1784258582.807002
         },
         {
             "file": "pokedex_gui.py",
             "project": "03_poke_lib",
             "lines": 833,
             "size_kb": 33.87,
-            "modified": 1784122065.405277
+            "modified": 1784258582.779002
         },
         {
             "file": "update_stats.py",
             "project": "08_repo_analytics",
             "lines": 513,
             "size_kb": 23.37,
-            "modified": 1784122065.4382646
+            "modified": 1784258582.8147204
         },
         {
             "file": "fetch_pokedata.py",
             "project": "03_poke_lib",
             "lines": 452,
             "size_kb": 17.27,
-            "modified": 1784122065.405277
+            "modified": 1784258582.779002
         },
         {
             "file": "main.py",
             "project": "01_kamen_nuzky_papir",
             "lines": 379,
             "size_kb": 17.52,
-            "modified": 1784122065.387277
+            "modified": 1784258582.7590017
         }
     ],
     "project_details": {
-        "01_kamen_nuzky_papir": {
+        "05_maze_generator": {
             "file_count": 2,
-            "code_lines": 379,
-            "doc_lines": 124,
+            "code_lines": 87,
+            "doc_lines": 25,
             "data_lines": 0,
-            "size_kb": 23.91,
+            "size_kb": 5.28,
             "has_doc": true
         },
         "04_banking_simulator": {
@@ -77,12 +77,12 @@
             "size_kb": 6.58,
             "has_doc": true
         },
-        "03_poke_lib": {
-            "file_count": 6,
-            "code_lines": 1428,
-            "doc_lines": 95,
-            "data_lines": 552173,
-            "size_kb": 11588.27,
+        "07_library_management_system": {
+            "file_count": 10,
+            "code_lines": 601,
+            "doc_lines": 52,
+            "data_lines": 271,
+            "size_kb": 24.89,
             "has_doc": true
         },
         "02_web_scraper_ai": {
@@ -91,14 +91,6 @@
             "doc_lines": 72,
             "data_lines": 4,
             "size_kb": 15.37,
-            "has_doc": true
-        },
-        "05_maze_generator": {
-            "file_count": 2,
-            "code_lines": 87,
-            "doc_lines": 25,
-            "data_lines": 0,
-            "size_kb": 5.28,
             "has_doc": true
         },
         "08_repo_analytics": {
@@ -117,12 +109,20 @@
             "size_kb": 2.91,
             "has_doc": true
         },
-        "07_library_management_system": {
-            "file_count": 10,
-            "code_lines": 601,
-            "doc_lines": 52,
-            "data_lines": 271,
-            "size_kb": 24.89,
+        "03_poke_lib": {
+            "file_count": 6,
+            "code_lines": 1428,
+            "doc_lines": 95,
+            "data_lines": 552173,
+            "size_kb": 11588.27,
+            "has_doc": true
+        },
+        "01_kamen_nuzky_papir": {
+            "file_count": 2,
+            "code_lines": 379,
+            "doc_lines": 124,
+            "data_lines": 0,
+            "size_kb": 23.91,
             "has_doc": true
         }
     },
@@ -155,44 +155,44 @@
     "average_code_doc_lines": 146.3,
     "recently_modified_files": [
         {
-            "file": "pozadavky.md",
-            "project": "root",
-            "lines": 41,
-            "size_kb": 2.77,
-            "modified_date": "15.07.2026 13:27"
-        },
-        {
             "file": "requirements.txt",
             "project": "root",
             "lines": 8,
             "size_kb": 0.07,
-            "modified_date": "15.07.2026 13:27"
+            "modified_date": "17.07.2026 03:23"
         },
         {
             "file": "hodnocení.md",
             "project": "root",
             "lines": 43,
             "size_kb": 4.35,
-            "modified_date": "15.07.2026 13:27"
+            "modified_date": "17.07.2026 03:23"
         },
         {
             "file": "README.md",
             "project": "root",
             "lines": 78,
             "size_kb": 4.5,
-            "modified_date": "15.07.2026 13:27"
+            "modified_date": "17.07.2026 03:23"
         },
         {
-            "file": "repo_stats.json",
+            "file": "pozadavky.md",
+            "project": "root",
+            "lines": 41,
+            "size_kb": 2.77,
+            "modified_date": "17.07.2026 03:23"
+        },
+        {
+            "file": "repo_report.md",
             "project": "08_repo_analytics",
-            "lines": 205,
-            "size_kb": 5.32,
-            "modified_date": "15.07.2026 13:27"
+            "lines": 114,
+            "size_kb": 4.91,
+            "modified_date": "17.07.2026 03:23"
         }
     ],
     "total_commits": 1,
     "active_days": 1,
-    "last_commit_date": "2026-07-13T03:16:35+00:00",
+    "last_commit_date": "2026-07-15T13:27:46+00:00",
     "last_commit_message": "Aktualizována analytika repozitáře (automatický report)",
     "last_commit_author": "Repo Bot",
     "weekly_compliance": {
