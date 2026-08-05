@@ -1,8 +1,8 @@
 {
-    "last_updated": "2026-08-03T03:15:07.463125",
+    "last_updated": "2026-08-05T13:58:45.548006",
     "project_count": 8,
     "total_directories": 14,
-    "repo_size_kb": 21454.0,
+    "repo_size_kb": 21454.01,
     "file_counts": {
         ".txt": 2,
         ".md": 12,
@@ -29,35 +29,35 @@
             "project": "03_poke_lib",
             "lines": 552173,
             "size_kb": 11528.66,
-            "modified": 1785726907.1516907
+            "modified": 1785938325.2323208
         },
         {
             "file": "pokedex_gui.py",
             "project": "03_poke_lib",
             "lines": 833,
             "size_kb": 33.87,
-            "modified": 1785726907.1266906
+            "modified": 1785938325.2043207
         },
         {
             "file": "update_stats.py",
             "project": "08_repo_analytics",
             "lines": 513,
             "size_kb": 23.37,
-            "modified": 1785726907.1597087
+            "modified": 1785938325.2406342
         },
         {
             "file": "fetch_pokedata.py",
             "project": "03_poke_lib",
             "lines": 452,
             "size_kb": 17.27,
-            "modified": 1785726907.1266906
+            "modified": 1785938325.2043207
         },
         {
             "file": "main.py",
             "project": "01_kamen_nuzky_papir",
             "lines": 379,
             "size_kb": 17.52,
-            "modified": 1785726907.1096907
+            "modified": 1785938325.1853206
         }
     ],
     "project_details": {
@@ -159,40 +159,40 @@
             "project": "root",
             "lines": 8,
             "size_kb": 0.07,
-            "modified_date": "03.08.2026 03:15"
+            "modified_date": "05.08.2026 13:58"
         },
         {
             "file": "hodnocení.md",
             "project": "root",
             "lines": 43,
             "size_kb": 4.35,
-            "modified_date": "03.08.2026 03:15"
+            "modified_date": "05.08.2026 13:58"
         },
         {
             "file": "pozadavky.md",
             "project": "root",
             "lines": 41,
             "size_kb": 2.77,
-            "modified_date": "03.08.2026 03:15"
+            "modified_date": "05.08.2026 13:58"
         },
         {
             "file": "README.md",
             "project": "root",
             "lines": 78,
             "size_kb": 4.5,
-            "modified_date": "03.08.2026 03:15"
+            "modified_date": "05.08.2026 13:58"
         },
         {
             "file": "repo_report.md",
             "project": "08_repo_analytics",
             "lines": 114,
             "size_kb": 4.91,
-            "modified_date": "03.08.2026 03:15"
+            "modified_date": "05.08.2026 13:58"
         }
     ],
     "total_commits": 1,
     "active_days": 1,
-    "last_commit_date": "2026-07-31T03:36:00+00:00",
+    "last_commit_date": "2026-08-03T03:15:07+00:00",
     "last_commit_message": "Aktualizována analytika repozitáře (automatický report)",
     "last_commit_author": "Repo Bot",
     "weekly_compliance": {
